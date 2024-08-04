@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Henna Store - Checkout</title>
+</head>
+
+<body>
+    <h1>Checkout</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirm Purchase</button>
+    </form>
+    <a href="{% url 'home' %}">Home</a>
+</body>
+
+</html>

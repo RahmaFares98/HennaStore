@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Henna Store - Profile</title>
+</head>
+
+<body>
+    <h1>Your Profile</h1>
+    <h2>Your Orders</h2>
+    {% if orders %}
+    <ul>
+        {% for order in orders %}
+        <li>Order {{ order.id }} - ${{ order.TotalAmount }} - {{ order.PaymentStatus }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>You have no orders.</p>
+    {% endif %}
+    <a href="{% url 'home' %}">Home</a>
+</body>
+
+</html>
