@@ -7,12 +7,17 @@
 .img-about {
     text-align: center;
     margin-bottom: 30px;
+    margin-top: 20px;
+    /* Add space above the image */
     transition: transform 0.3s ease;
 }
 
 .img-about img {
-    width: 100%;
+    max-width: 20%;
+    /* Set a max width */
     height: auto;
+    margin-left: 20px;
+    /* Maintain aspect ratio */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -38,4 +43,6 @@
     font-size: 16px;
     line-height: 1.8;
     color: #555;
+    text-align: justify;
 }
+

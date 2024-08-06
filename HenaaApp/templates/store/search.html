@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Payment</title>
+</head>
+
+<body>
+    <h1>Payment</h1>
+    {% for result in results %}
+    <div class="search-result-item">
+        <!-- Customize this according to your data -->
+        <h3>{{ result.Name }}</h3>
+        <p>{{ result.Color }}</p>
+    </div>
+    {% endfor %}
+
+    </form>
+    <a href="{% url 'home' %}">Home</a>
+</body>
+
+</html>

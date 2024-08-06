@@ -8,32 +8,32 @@
     <!-- basic -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- mobile metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!-- site metas -->
-    <title>Henna</title>
+    <title>Henna Store Project</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <!-- style css -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/Style_1.css' %}">
-    <!-- Responsive -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_s.css' %}">
+
+    <!-- responsive -->
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-    <!-- fevicon -->
+    <!-- favicon -->
     <link rel="icon" href="{% static 'images/Icon.png' %}" type="image/gif" />
-    <!-- Scrollbar Custom CSS -->
+    <!-- scrollbar custom css -->
     <link rel="stylesheet" href="{% static 'css/jquery.mCustomScrollbar.min.css' %}">
-    <!-- Tweaks for older IEs -->
+    <!-- font awesome -->
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-    <!-- font awesome -->
-    <link rel="stylesheet" type="text/css"
-        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- owl stylesheets -->
     <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext"
         rel="stylesheet">
@@ -55,9 +55,8 @@
                             <ul>
                                 <li><a href="{% url 'home' %}">Home</a></li>
                                 <li><a href="{% url 'about' %}">About</a></li>
-                                <li><a href="{% url 'product_list' %}">Products</a></li>
+                                <li><a href="#main_slider">Product</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
-
                             </ul>
                         </div>
                     </div>
@@ -84,10 +83,9 @@
                         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                         <a href="{% url 'home' %}">Home</a>
                         <a href="{% url 'about' %}">About</a>
-                        <a href="{% url 'product_list' %}">Shop</a>
-                        <a href="{% url 'product_list' %}">Products</a>
                         <a href="{% url 'cart' %}">Cart</a>
                         <a href="{% url 'profile' %}">Profile</a>
+                        <a href="#main_slider">Product</a>
                         {% if user.is_authenticated %}
                         <a href="{% url 'logout' %}">Logout</a>
                         {% else %}
@@ -99,11 +97,11 @@
                             src="{% static 'images/toggle-icon.png' %}"></span>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Category
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Categories
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Dress</a>
-                            <a class="dropdown-item" href="#">Accessories</a>
+                            <a class="dropdown-item" href="#main_slider">Modern Traditional Dress</a>
+                            <a class="dropdown-item" href="#Second_slider">Traditional Dress</a>
                         </div>
                     </div>
                     <div class="main">
@@ -117,27 +115,28 @@
                                 </button>
                             </div>
                         </div>
+                        {% for result in results %}
+                        <div class="search-result-item">
+                            <h3>{{ result.Name }}</h3>
+                            <p>{{ result.Description }}</p>
+                        </div>
+                        {% endfor %}
                     </div>
                     <div class="header_box">
                         <div class="lang_box">
-                            <a href="#" title="Language" class="nav-link" data-toggle="dropdown" aria-expanded="true">
-                                <img src="{% static 'images/flag-uk.png' %}" alt="flag" class="mr-2"
-                                    title="English"> English
+                            <a href="/english" title="Language" class="nav-link" data-toggle="dropdown" aria-expanded="true">
+                                <img src="{% static 'images/flag-uk.png' %}" alt="flag" class="mr-2" title="English">
+                                English
                                 <i class="fa fa-angle-down ml-2" aria-hidden="true"></i>
-                        <div class="dropdown-menu ">
-                            <a href="#" class="dropdown-item">
-                                <img src="{% static 'images/sudia.jpg' %}" alt="flag" class="mr-2"
-                              title="Arabic">   Arabic
                             </a>
-                            </div>
                         </div>
                         <div class="login_menu">
                             <ul>
-                                <li><a href="#">
+                                <li><a href="/cart">
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                         <span class="padding_10">Cart</span></a>
                                 </li>
-                                <li><a href="#">
+                                <li><a href="/profile">
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                         <span class="padding_10">Profile</span></a>
                                 </li>
@@ -156,33 +155,33 @@
                         <div class="carousel-item active">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h1 class="banner_taital">Get Start <br>Your favriot shoping</h1>
-                                    <div class="buynow_bt"><a href="#">Buy Now</a></div>
+                                    <h1 class="banner_taital">Get Started <br>Your favorite shopping</h1>
+                                    <div class="buynow_bt"><a href="/cart">Buy Now</a></div>
                                 </div>
                             </div>
                         </div>
                         <div class="carousel-item">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h1 class="banner_taital">Get Start <br>Your favriot shoping</h1>
-                                    <div class="buynow_bt"><a href="#">Buy Now</a></div>
+                                    <h1 class="banner_taital">Get Started <br>Your favorite shopping</h1>
+                                    <div class="buynow_bt"><a href="/cart">Buy Now</a></div>
                                 </div>
                             </div>
                         </div>
                         <div class="carousel-item">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h1 class="banner_taital">Get Start <br>Your favriot shoping</h1>
-                                    <div class="buynow_bt"><a href="#">Buy Now</a></div>
+                                    <h1 class="banner_taital">Get Started <br>Your favorite shopping</h1>
+                                    <div class="buynow_bt"><a href="/cart">Buy Now</a></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <a class="carousel-control-prev" href="#my_slider" role="button" data-slide="prev">
-                        <i class="fa fa-angle-left"></i>
-                    </a>
                     <a class="carousel-control-next" href="#my_slider" role="button" data-slide="next">
                         <i class="fa fa-angle-right"></i>
+                    </a>
+                    <a class="carousel-control-prev" href="#my_slider" role="button" data-slide="prev">
+                        <i class="fa fa-angle-left"></i>
                     </a>
                 </div>
             </div>
@@ -190,230 +189,116 @@
         <!-- banner section end -->
     </div>
     <!-- banner bg main end -->
-    <!-- fashion section start -->
-<!-- fashion section start -->
-<div class="fashion_section">
-    <div id="main_slider" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            {% for group in grouped_dresses %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <div class="container">
-                    <h1 class="fashion_taital">Traditional Thobe</h1>
-                    <div class="fashion_section_2">
-                        <div class="row">
-                            {% for dress in group %}
-                            <div class="col-lg-4 col-sm-4">
-                                <div class="box_main">
-                                    <h4 class="shirt_text">{{ dress.Name }}</h4>
-                                    <p class="price_text">Price <span style="color: #262626;">${{ dress.Price }}</span>
-                                    </p>
-                                    <div class="tshirt_img"><img src="{{ dress.ImageURL }}" alt="{{ dress.Name }}"></div>
-                                    <div class="btn_main">
-                                        <div class="buy_bt"><a href="{% url 'product_detail' dress.id %}">Buy Now</a>
-                                        </div>
-                                        <div class="seemore_bt"><a href="{% url 'product_detail' dress.id %}">See
-                                                More</a></div>
-                                    </div>
-                                    <div class="new">
-                                        <span>New</span>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
-            <i class="fa fa-angle-left"></i>
-        </a>
-        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
-            <i class="fa fa-angle-right"></i>
-        </a>
-    </div>
-</div>
-<!-- fashion section end -->
-
-
-    <!-- fashion section end -->
-
-    <!-- jewellery  section start -->
-    <div class="jewellery_section">
-        <div id="jewellery_main_slider" class="carousel slide" data-ride="carousel">
+    <div class="fashion_section">
+        <div id="main_slider" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
-                <div class="carousel-item active">
+                <!-- Modern Traditional Thobe Section -->
+                {% for group in grouped_dresses.modern %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
                     <div class="container">
-                        <h1 class="fashion_taital">Accessories</h1>
+                        <br>
+                        <h1 class="fashion_taital">Modern Traditional Thobe</h1>
                         <div class="fashion_section_2">
                             <div class="row">
+                                {% for dress in group %}
                                 <div class="col-lg-4 col-sm-4">
                                     <div class="box_main">
-                                        <h4 class="shirt_text">Jumkas</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="{% static 'images/jhumka-img.png' %}">
+                                        <h4 class="shirt_text">{{ dress.Name }}</h4>
+                                        <p class="price_text">Price <span style="color: #262626;">${{ dress.Price}}</span>
+                                        </p>
+                                        <div class="tshirt_img"><img src="{{ dress.ImageURL }}" alt="{{ dress.Name }}">
                                         </div>
                                         <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
+                                            <div class="buy_bt"><a href="{% url 'product_detail' dress.id %}">Buy
+                                                    Now</a>
+                                            </div>
+                                            <div class="seemore_bt"><a href="{% url 'product_detail' dress.id %}">See
+                                                    More</a></div>
                                         </div>
+                                        <div class="new"><span>New</span></div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Necklaces</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="{% static 'images/neklesh-img.png' %}">
-                                        </div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Kangans</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="{% static 'images/kangan-img.png' %}">
-                                        </div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <div class="container">
-                        <h1 class="fashion_taital">Accessories</h1>
-                        <div class="fashion_section_2">
-                            <div class="row">
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Jumkas</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="{% static 'images/jhumka-img.png' %}">
-                                        </div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Necklaces</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="{% static 'images/neklesh-img.png' %}">
-                                        </div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Kangans</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="{% static 'images/kangan-img.png' %}">
-                                        </div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="container">
-                        <h1 class="fashion_taital">Accessories</h1>
-                        <div class="fashion_section_2">
-                            <div class="row">
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Jumkas</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="{% static 'images/jhumka-img.png' %}">
-                                        </div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Necklaces</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="{% static 'images/neklesh-img.png' %}">
-                                        </div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Kangans</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="{% static 'images/kangan-img.png' %}">
-                                        </div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
-            <a class="carousel-control-prev" href="#jewellery_main_slider" role="button" data-slide="prev">
+            <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
                 <i class="fa fa-angle-left"></i>
             </a>
-            <a class="carousel-control-next" href="#jewellery_main_slider" role="button" data-slide="next">
+            <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
                 <i class="fa fa-angle-right"></i>
             </a>
-            <div class="loader_main">
-                <div class="loader"></div>
+            </div>
+    </div>
+    <div class="fashion_section">
+
+        <div id="Second_slider" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <!-- Modern Traditional Thobe Section -->
+                {% for group in grouped_dresses.traditional %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="container">
+                        <h1 class="fashion_taital"> Traditional Thobe</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                {% for dress in group %}
+                                <div class="col-lg-4 col-sm-4">
+                                    <div class="box_main">
+                                        <h4 class="shirt_text">{{ dress.Name }}</h4>
+                                        <p class="price_text">Price <span style="color: #262626;">${{ dress.Price}}</span>
+                                        </p>
+                                        <div class="tshirt_img"><img src="{{ dress.ImageURL }}" alt="{{ dress.Name }}">
+                                        </div>
+                                        <div class="btn_main">
+                                            <div class="buy_bt"><a href="{% url 'product_detail' dress.id %}">Buy
+                                                    Now</a>
+                                            </div>
+                                            <div class="seemore_bt"><a href="{% url 'product_detail' dress.id %}">See
+                                                    More</a></div>
+                                        </div>
+                                        <div class="new"><span>New</span></div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prevv" href="#Second_slider" role="button" data-slide="prev">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            <a class="carousel-control-nextt" href="#Second_slider" role="button" data-slide="next">
+                <i class="fa fa-angle-right"></i>
+            </a>
+            </div>
             </div>
         </div>
     </div>
-    <!-- jewellery  section end -->
+
+    <!-- Traditional section end -->
+
     <!-- footer section start -->
     <div class="footer_section layout_padding">
         <div class="container">
-            <div class="footer_logo">Henna Store Project</div>
-            <div class="input_bt">
-                <input type="text" class="mail_bt" placeholder="Your Email" name="Your Email">
-                <span class="subscribe_bt" id="basic-addon2"><a href="#">Subscribe</a></span>
-            </div>
+            <div class="footer_logo" style="font-weight: bolder;color: white;">Henna Store Project</div>
             <div class="footer_menu">
-                    <ul>
-                        <li><a href="{% url 'home' %}">Home</a></li>
-                        <li><a href="{% url 'about' %}">About</a></li>
-                        <li><a href="{% url 'product_list' %}">Products</a></li>
-                        <li><a href="{% url 'profile' %}">Profile</a></li>
-                    
-                    </ul>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="#main_slider">Product</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+            </ul>
             </div>
-            <div class="location_main">Help Line Number : <a href="#">+970 00000000</a></div>
+            <div class="location_main">Help Line Number: <a href="https://wa.me/+972592222832?text=Hello%2C%20I%20need%20help>">+970 00000000</a></div>
         </div>
     </div>
     <!-- footer section end -->
-    <!-- copyright section start -->
-    <!-- copyright section end -->
+
     <!-- Javascript files -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
@@ -430,6 +315,33 @@
 
         function closeNav() {
             document.getElementById("mySidenav").style.width = "0";
+        }
+
+        document.getElementById('search-button').addEventListener('click', function () {
+            const query = document.getElementById('search-input').value;
+            if (query) {
+                fetchResults(query);
+            }
+        });
+
+        document.getElementById('search-input').addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                const query = event.target.value;
+                if (query) {
+                    fetchResults(query);
+                }
+            }
+        });
+
+        function fetchResults(query) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/search?q=${query}`, true);
+            xhr.onload = function () {
+                if (this.status === 200) {
+                    document.getElementById('search-results').innerHTML = this.responseText;
+                }
+            };
+            xhr.send();
         }
     </script>
 </body>

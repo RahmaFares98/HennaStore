@@ -1,0 +1,34 @@
+.carousel-control-prevv,
+.carousel-control-nextt {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 55px;
+    height: 55px;
+    background-color: #30302e;
+    opacity: 1;
+    font-size: 30px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.carousel-control-prevv {
+    left: 615px;
+    top: 105%;
+}
+
+.carousel-control-nextt {
+    right: 615px;
+    top: 105%;
+}
+
+.carousel-control-prevv:focus,
+.carousel-control-prevv:hover,
+.carousel-control-nextt:focus,
+.carousel-control-nextt:hover {
+    color: #fff;
+    background-color: #f26522;
+}

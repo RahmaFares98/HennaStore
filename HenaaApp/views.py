@@ -5,22 +5,32 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.utils import timezone
+from django.http import JsonResponse
+from django.shortcuts import render
+from .models import * # Replace with your actual model
+from .forms import ReviewForm
+from django.db.utils import IntegrityError
 
 def home(request):
     dresses = list(Dress.objects.all())
-    grouped_dresses = [dresses[i:i + 3] for i in range(0, len(dresses), 3)]
+    modern_dresses = dresses[:6]  # First 6 dresses
+    traditional_dresses = dresses[6:]  # Remaining dresses
+    
+    grouped_dresses = {
+        'modern': [modern_dresses[i:i + 3] for i in range(0, len(modern_dresses), 3)],
+        'traditional': [traditional_dresses[i:i + 3] for i in range(0, len(traditional_dresses), 3)]
+    }
+
     context = {
         'grouped_dresses': grouped_dresses,
+        'dresses':Dress.objects.all(),
+
     }
     return render(request, 'store/home.html', context)
 
-def product_list(request):
-    dresses = Dress.objects.all()
-    return render(request, 'store/product_list.html', {'dresses': dresses})
-
-def product_detail(request, dress_id):
-    dress = get_object_or_404(Dress, pk=dress_id)
-    return render(request, 'store/product_detail.html', {'dress': dress})
+# def product_list(request):
+#     dresses = Dress.objects.all()
+#     return render(request, 'store/product_list.html', {'dresses': dresses})
 
 @login_required
 def cart(request):
@@ -111,3 +121,76 @@ def checkout(request):
 
 def about(request):
     return render(request, 'store/about.html')
+
+
+def search_view(request):
+    query = request.GET.get('q', '')
+    # Perform your search logic here, e.g., search in the database
+    results = [
+        {"name": "Yafa Thobe", "Color": "White and Red"},
+        {"name": "Bissan Thobe", "Color": "white and Blue"},
+    ]
+    return JsonResponse({"results": results})
+
+from .forms import ReviewForm
+
+def product_detail(request, dress_id):
+    dress = get_object_or_404(Dress, id=dress_id)
+    reviews = Review.objects.filter(dress=dress).order_by('-created_at')
+    review_form = ReviewForm()
+
+    context = {
+        'dress': dress,
+        'reviews': reviews,
+        'form': review_form
+    }
+    return render(request, 'store/product_detail.html', context)
+
+@login_required
+def add_review(request, dress_id):
+    dress = get_object_or_404(Dress, id=dress_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.dress = dress
+            review.user = request.user
+            review.save()
+            return redirect('product_detail', dress_id=dress.id)
+    return redirect('product_detail', dress_id=dress.id)
+
+
+def product_detail(request, dress_id):
+    dress = get_object_or_404(Dress, id=dress_id)
+    reviews = Review.objects.filter(DressID=dress).order_by('-ReviewDate')
+    review_form = ReviewForm()
+
+    context = {
+        'dress': dress,
+        'reviews': reviews,
+        'form': review_form
+    }
+    return render(request, 'store/product_detail.html', context)
+
+@login_required
+def add_review(request, dress_id):
+    dress = get_object_or_404(Dress, id=dress_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.DressID = dress
+            review.UserID = request.user
+            try:
+                review.save()
+            except IntegrityError:
+                # Handle the error as needed
+                reviews = Review.objects.filter(DressID=dress).order_by('-ReviewDate')
+                return render(request, 'store/product_detail.html', {
+                    'dress': dress,
+                    'form': form,
+                    'reviews': reviews,
+                    'error': 'There was a problem with your review submission. Please try again.'
+                })
+            return redirect('product_detail', dress_id=dress.id)
+    return redirect('product_detail', dress_id=dress.id)

@@ -650,6 +650,8 @@ a:hover {
   color: #f26522;
 }
 
+
+/* fashion section end */
 #main_slider a.carousel-control-next {
   right: 615px;
   top: 105%;
@@ -678,93 +680,6 @@ a:hover {
   background-color: #f26522;
 }
 
-
-/* fashion section end */
-
-
-/* electronic section start */
-
-.electronic_img {
-  width: 100%;
-  text-align: center;
-  margin: 50px 0px;
-  min-height: 293px;
-}
-
-#electronic_main_slider a.carousel-control-next {
-  right: 615px;
-  top: 105%;
-}
-
-#electronic_main_slider a.carousel-control-prev {
-  left: 615px;
-  top: 105%;
-}
-
-#electronic_main_slider .carousel-control-next,
-#electronic_main_slider .carousel-control-prev {
-  width: 55px;
-  height: 55px;
-  background-color: #30302e;
-  opacity: 1;
-  font-size: 30px;
-  color: #ffffff;
-}
-
-#electronic_main_slider .carousel-control-next:focus,
-#electronic_main_slider .carousel-control-next:hover,
-#electronic_main_slider .carousel-control-prev:focus,
-#electronic_main_slider .carousel-control-prev:hover {
-  color: #fff;
-  background-color: #f26522;
-}
-
-
-/* electronic section end */
-
-
-/* jewellery section start */
-
-.jewellery_section {
-  width: 100%;
-  float: left;
-  padding-bottom: 50px;
-}
-
-.jewellery_img {
-  width: 100%;
-  text-align: center;
-  margin: 50px 0px;
-  min-height: 293px;
-}
-
-#jewellery_main_slider a.carousel-control-next {
-  right: 615px;
-  top: 75%;
-}
-
-#jewellery_main_slider a.carousel-control-prev {
-  left: 615px;
-  top: 75%;
-}
-
-#jewellery_main_slider .carousel-control-next,
-#jewellery_main_slider .carousel-control-prev {
-  width: 55px;
-  height: 55px;
-  background-color: #30302e;
-  opacity: 1;
-  font-size: 30px;
-  color: #ffffff;
-}
-
-#jewellery_main_slider .carousel-control-next:focus,
-#jewellery_main_slider .carousel-control-next:hover,
-#jewellery_main_slider .carousel-control-prev:focus,
-#jewellery_main_slider .carousel-control-prev:hover {
-  color: #fff;
-  background-color: #f26522;
-}
 
 
 /* loader bar css start */
@@ -809,14 +724,6 @@ a:hover {
   }
 }
 
-
-/* loader bar css end */
-
-
-/* jewellery section end */
-
-
-/* footer section start */
 
 
 /* footer section start */
@@ -969,16 +876,17 @@ input.mail_bt::placeholder {
 
 .product_detail_section .container {
   margin: 0 auto;
-  display: flex;
-  justify-content: flex-start;
   background-color: #eec39a;
+  display: flex;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+
 .product_detail_section .container .row1 {
-  margin-left: 150px
+  margin-left: 150px;
+  width:150%
 }
 
 .product_detail_section .product_name {
@@ -1039,4 +947,80 @@ input.mail_bt::placeholder {
 
 .img-box{
   height: 80%;
+}
+/* review */
+
+.review_section {
+  padding: 40px 0;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+.review_section h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.review {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.review h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.review p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.review small {
+  font-size: 14px;
+  color: #777;
+}
+
+.add_review {
+  margin-top: 40px;
+}
+
+.add_review h3 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.add_review form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.add_review form select {
+  width: 100px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.add_review form button {
+  background-color: #f76c6c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add_review form button:hover {
+  background-color: #e65e5e;
 }

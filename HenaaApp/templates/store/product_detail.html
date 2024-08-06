@@ -55,7 +55,6 @@
                             <ul>
                                 <li><a href="{% url 'home' %}">Home</a></li>
                                 <li><a href="{% url 'about' %}">About</a></li>
-                                <li><a href="{% url 'product_list' %}">Products</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
                             </ul>
                         </div>
@@ -95,8 +94,6 @@
                         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                         <a href="{% url 'home' %}">Home</a>
                         <a href="{% url 'about' %}">About</a>
-                        <a href="{% url 'product_list' %}">Shop</a>
-                        <a href="{% url 'product_list' %}">Products</a>
                         <a href="{% url 'cart' %}">Cart</a>
                         <a href="{% url 'profile' %}">Profile</a>
                         {% if user.is_authenticated %}
@@ -105,6 +102,7 @@
                         <a href="{% url 'login' %}">Login</a>
                         <a href="{% url 'register' %}">Register</a>
                         {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,16 +124,44 @@
                 {% if user.is_authenticated %}
                 <a href="{% url 'add_to_cart' dress.id %}" class="btn btn-primary">Add to Cart</a>
                 {% endif %}
-                <a href="{% url 'product_list' %}" class="btn btn-secondary">Back to Products</a>
                 <a href="{% url 'home' %}" class="btn btn-secondary">Home</a>
             </div>
-                <div class="row1">
-                    <img src="{{ dress.ImageURL }}" alt="{{ dress.Name }}" class="product_image">
-                </div>
-                <br>
+            <div class="row1">
+                <img src="{{ dress.ImageURL }}" alt="{{ dress.Name }}" class="product_image">
+            </div>
+            <br>
         </div>
     </div>
     <!-- Product Detail Section End -->
+
+    <!-- Review Section Start -->
+    <div class="review_section">
+        <div class="container">
+            <h2>Customer Reviews</h2>
+            {% for review in reviews %}
+            <div class="review">
+                <h4>{{ review.UserID.username }}</h4>
+                <p>{{ review.Comment }}</p>
+                <small>Rating: {{ review.Rating }}/5</small>
+                <small>Reviewed on: {{ review.ReviewDate }}</small>
+            </div>
+            {% endfor %}
+            
+            {% if user.is_authenticated %}
+            <div class="add_review">
+                <h3>Add Your Review</h3>
+                <form action="{% url 'add_review' dress.id %}" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
+            </div>
+            {% else %}
+            <p><a href="{% url 'login' %}">Log in</a> to add a review.</p>
+            {% endif %}
+            </div>
+            </div>
+            <!-- Review Section End -->
 
     <!-- footer section start -->
     <div class="footer_section layout_padding">
@@ -149,7 +175,6 @@
                 <ul>
                     <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'product_list' %}">Products</a></li>
                     <li><a href="{% url 'profile' %}">Profile</a></li>
                 </ul>
             </div>
