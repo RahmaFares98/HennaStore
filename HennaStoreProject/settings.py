@@ -95,7 +95,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'henna',
+        'NAME': 'Henna_Store',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'localhost',  # or your database server

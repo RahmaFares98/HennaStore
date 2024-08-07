@@ -55,6 +55,7 @@
                             <ul>
                                 <li><a href="{% url 'home' %}">Home</a></li>
                                 <li><a href="{% url 'about' %}">About</a></li>
+                                <li><a href="{% url 'home' %}#main_slider">Product</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
                             </ul>
                         </div>
@@ -147,7 +148,7 @@
             </div>
             {% endfor %}
             
-            {% if user.is_authenticated %}
+            {% if user_id %}
             <div class="add_review">
                 <h3>Add Your Review</h3>
                 <form action="{% url 'add_review' dress.id %}" method="post">
@@ -162,27 +163,24 @@
             </div>
             </div>
             <!-- Review Section End -->
-
-    <!-- footer section start -->
-    <div class="footer_section layout_padding">
-        <div class="container">
-            <div class="footer_logo">Henna Store Project</div>
-            <div class="input_bt">
-                <input type="text" class="mail_bt" placeholder="Your Email" name="Your Email">
-                <span class="subscribe_bt" id="basic-addon2"><a href="#">Subscribe</a></span>
-            </div>
-            <div class="footer_menu">
-                <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'profile' %}">Profile</a></li>
-                </ul>
-            </div>
-            <div class="location_main">Help Line Number : <a href="#">+970 000000000</a></div>
+        
+<!-- footer section start -->
+<div class="footer_section layout_padding">
+    <div class="container">
+        <div class="footer_logo" style="font-weight: bolder;color: white;">Henna Store Project</div>
+        <div class="footer_menu">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'home' %}#main_slider">Product</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+            </ul>
         </div>
+        <div class="location_main">Help Line Number: <a
+                href="https://wa.me/+972592222832?text=Hello%2C%20I%20need%20help>">+970 00000000</a></div>
     </div>
-    <!-- footer section end -->
-
+</div>
+<!-- footer section end -->
     <!-- Javascript files -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>

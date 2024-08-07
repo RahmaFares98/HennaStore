@@ -1,5 +1,60 @@
 from django.db import models
-from django.contrib.auth.models import User
+import re
+import bcrypt
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
+
+
+class UserManager(models.Manager):
+    def basic_register(self, postData): # function for registration 
+        errors = {}
+        if len(postData['username']) < 2:# validated first name
+            errors["username"] = "username should be at least 2 characters"## as list ""if satament
+        #validated format of mail and unique email used
+        EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+        if not EMAIL_REGEX.match(postData['email']):             
+            errors['email'] = "Invalid email address!"
+        if User.objects.filter(email=postData['email']).exists():
+            errors['email_used'] = "Email already in use!"
+        # validated pass to be greater than 8 char and match with confirm pass 
+        if len(postData['password']) < 8:
+            errors["password"] = "Password should be at least 8 characters"
+        if postData['password'] != postData['confirm_pw']:
+            errors["confirm_pw"] = "Passwords are not match "
+        return errors
+    
+    def basic_login(self, postData):# function for login 
+            errors = {}
+            try:
+                user = User.objects.get(email=postData['username'])
+            except ObjectDoesNotExist:
+                errors['username'] = "username not found."
+                return errors
+            if not bcrypt.checkpw(postData['password'].encode(), user.password.encode()):
+                errors['password'] = "Invalid password."
+            return errors
+
+
+class User(models.Model):
+    username = models.CharField(max_length=50)
+    email = models.CharField(max_length=225)
+    password = models.CharField(max_length=150)
+    confirm_pw=models.CharField(max_length=150)
+    created_at =models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = UserManager()
+
+def create_user(POST):
+    password = POST['password']
+    return User.objects.create(
+        username=POST['username'],
+        email=POST['email'],
+        password= bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode(),
+        # confirm_pw=POST['password']
+        )
+def get_user(session):
+    return User.objects.get(id=session['user_id'])
+
 
 class Dress(models.Model):
     Name = models.CharField(max_length=255)
@@ -62,3 +117,5 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review {self.id} by {self.UserID}"
+
+

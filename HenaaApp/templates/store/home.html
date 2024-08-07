@@ -57,6 +57,13 @@
                                 <li><a href="{% url 'about' %}">About</a></li>
                                 <li><a href="#main_slider">Product</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
+                                {% if user_id %}
+                            <li> <a href="{% url 'logout' %}">Logout</a></li>
+                                {% else %}
+                            <li> <a href="{% url 'login' %}">Login</a></li>
+                                {% endif %}
+
+
                             </ul>
                         </div>
                     </div>
@@ -86,7 +93,7 @@
                         <a href="{% url 'cart' %}">Cart</a>
                         <a href="{% url 'profile' %}">Profile</a>
                         <a href="#main_slider">Product</a>
-                        {% if user.is_authenticated %}
+                        {% if user_id %}
                         <a href="{% url 'logout' %}">Logout</a>
                         {% else %}
                         <a href="{% url 'login' %}">Login</a>
