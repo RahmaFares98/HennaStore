@@ -58,9 +58,14 @@
                                 <li><a href="#main_slider">Product</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
                                 {% if user_id %}
-                            <li> <a href="{% url 'logout' %}">Logout</a></li>
+                                <ul>
+                                    <li><a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a></li>
+                                </ul>
+                                <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+                                    {% csrf_token %}
+                                </form>
                                 {% else %}
-                            <li> <a href="{% url 'login' %}">Login</a></li>
+                                <li> <a href="/login">Login</a></li>
                                 {% endif %}
 
 
@@ -131,7 +136,8 @@
                     </div>
                     <div class="header_box">
                         <div class="lang_box">
-                            <a href="/english" title="Language" class="nav-link" data-toggle="dropdown" aria-expanded="true">
+                            <a href="/english" title="Language" class="nav-link" data-toggle="dropdown"
+                                aria-expanded="true">
                                 <img src="{% static 'images/flag-uk.png' %}" alt="flag" class="mr-2" title="English">
                                 English
                                 <i class="fa fa-angle-down ml-2" aria-hidden="true"></i>
@@ -211,7 +217,8 @@
                                 <div class="col-lg-4 col-sm-4">
                                     <div class="box_main">
                                         <h4 class="shirt_text">{{ dress.Name }}</h4>
-                                        <p class="price_text">Price <span style="color: #262626;">${{ dress.Price}}</span>
+                                        <p class="price_text">Price <span style="color: #262626;">${{
+                                                dress.Price}}</span>
                                         </p>
                                         <div class="tshirt_img"><img src="{{ dress.ImageURL }}" alt="{{ dress.Name }}">
                                         </div>
@@ -238,7 +245,7 @@
             <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
                 <i class="fa fa-angle-right"></i>
             </a>
-            </div>
+        </div>
     </div>
     <div class="fashion_section">
 
@@ -255,7 +262,8 @@
                                 <div class="col-lg-4 col-sm-4">
                                     <div class="box_main">
                                         <h4 class="shirt_text">{{ dress.Name }}</h4>
-                                        <p class="price_text">Price <span style="color: #262626;">${{ dress.Price}}</span>
+                                        <p class="price_text">Price <span style="color: #262626;">${{
+                                                dress.Price}}</span>
                                         </p>
                                         <div class="tshirt_img"><img src="{{ dress.ImageURL }}" alt="{{ dress.Name }}">
                                         </div>
@@ -282,9 +290,9 @@
             <a class="carousel-control-nextt" href="#Second_slider" role="button" data-slide="next">
                 <i class="fa fa-angle-right"></i>
             </a>
-            </div>
-            </div>
         </div>
+    </div>
+    </div>
     </div>
 
     <!-- Traditional section end -->
@@ -294,14 +302,15 @@
         <div class="container">
             <div class="footer_logo" style="font-weight: bolder;color: white;">Henna Store Project</div>
             <div class="footer_menu">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                <li><a href="#main_slider">Product</a></li>
-                <li><a href="{% url 'profile' %}">Profile</a></li>
-            </ul>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="#main_slider">Product</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                </ul>
             </div>
-            <div class="location_main">Help Line Number: <a href="https://wa.me/+972592222832?text=Hello%2C%20I%20need%20help>">+970 00000000</a></div>
+            <div class="location_main">Help Line Number: <a
+                    href="https://wa.me/+972592222832?text=Hello%2C%20I%20need%20help>">+970 00000000</a></div>
         </div>
     </div>
     <!-- footer section end -->

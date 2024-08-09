@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}My Custom Admin{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin_dashboard' %}">Henna Store Admin</a></h1>
+{% endblock %}
+
+{% block nav-global %}
+<ul>
+<a href="{% url 'admin:index' %}">Admin Home</a>
+    <!-- other navigation items -->
+</ul>
+{% endblock %}

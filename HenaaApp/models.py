@@ -42,6 +42,8 @@ class User(models.Model):
     confirm_pw=models.CharField(max_length=150)
     created_at =models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_admin = models.BooleanField(default=False)  # Add a field to distinguish admin users
+
     objects = UserManager()
 
 def create_user(POST):
@@ -50,6 +52,8 @@ def create_user(POST):
         username=POST['username'],
         email=POST['email'],
         password= bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode(),
+        is_admin =False  # Add a field to distinguish admin users
+
         # confirm_pw=POST['password']
         )
 def get_user(session):
@@ -117,5 +121,3 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review {self.id} by {self.UserID}"
-
-

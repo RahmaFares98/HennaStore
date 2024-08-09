@@ -32,7 +32,10 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+#AUTH_USER_MODEL = 'HenaaApp.CustomUser'
+
 INSTALLED_APPS = [
+    'grappelli',
     'HenaaApp',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,6 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
+
 
 
 ROOT_URLCONF = 'HennaStoreProject.urls'

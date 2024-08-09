@@ -4,38 +4,36 @@
 <head>
     <!-- Load static template tag library -->
     {% load static %}
-    <title>Henna Store - User Profile</title>
 
     <!-- basic -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- mobile metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!-- site metas -->
-    <meta name="keywords" content="Profile, User, Henna Store">
-    <meta name="description" content="User Profile and Order History">
-    <meta name="author" content="Henna Store">
+    <title>Henna Store Project</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <!-- style css -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/Style_1.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/about_sty.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_s.css' %}">
 
-    <!-- Responsive -->
+    <!-- responsive -->
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-    <!-- fevicon -->
+    <!-- favicon -->
     <link rel="icon" href="{% static 'images/Icon.png' %}" type="image/gif" />
-    <!-- Scrollbar Custom CSS -->
+    <!-- scrollbar custom css -->
     <link rel="stylesheet" href="{% static 'css/jquery.mCustomScrollbar.min.css' %}">
-    <!-- Tweaks for older IEs -->
+    <!-- font awesome -->
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-    <!-- font awesome -->
-    <link rel="stylesheet" type="text/css"
-        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- owl stylesheets -->
     <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext"
         rel="stylesheet">
@@ -45,7 +43,7 @@
         media="screen">
 </head>
 
-<body class="backcolor">
+<body>
     <!-- banner bg main start -->
     <div class="banner_bg_main">
         <!-- header top section start -->
@@ -54,24 +52,12 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="custom_menu">
-                            <ul>
-                                <li><a href="{% url 'home' %}">Home</a></li>
-                                <li><a href="{% url 'about' %}">About</a></li>
-                                <li><a href="#main_slider">Product</a></li>
-                                <li><a href="{% url 'profile' %}">Profile</a></li>
-                                {% if user_id %}
-                                <ul>
-                                    <li><a href="#"
-                                            onclick="document.getElementById('logout-form').submit();">Logout</a></li>
-                                </ul>
-                                <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
-                                    {% csrf_token %}
-                                </form>
-                                {% else %}
-                                <li> <a href="/login">Login</a></li>
-                                {% endif %}
-
-                            </ul>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'home' %}#main_slider">Product</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                </ul>
                         </div>
                     </div>
                 </div>
@@ -83,56 +69,57 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="banner_taital">Henna Store Project</div>
+                        <div class="banner_taital">Henna Store Admin</div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- logo section end -->
         <!-- header section start -->
-        <div class="login_menu">
-            <ul>
-                <li><a href="#">
-                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        <span class="padding_10">Cart</span></a>
-                </li>
-                <li><a href="#">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <span class="padding_10">Profile</span></a>
-                </li>
-            </ul>
-        </div>
-        <!-- header section end -->
     </div>
     <!-- banner bg main end -->
 
-    <!-- Profile Section Start -->
+    <!-- Admin Dashboard Section Start -->
     <section class="about_section_layout_padding_1">
         <div class="container_1">
+            <div class="heading_container">
+                <h2>Admin Dashboard</h2>
+            </div>
             <div class="row">
-                <div class="col-md-12">
-                    <div class="detail-box">
-                        <div class="heading_container">
-                            <h2>Your Profile</h2>
+                <div class="col-md-4">
+                    <div class="card mb-3" style="background-color: #f5f5dc;">
+                        <div class="card-header">Total Users</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ total_users }}</h5>
+                            <p class="card-text">Manage all registered users.</p>
+                            <a href="{% url 'admin_users' %}" class="btn btn-light">View Details</a>
                         </div>
-                        <p style="color: rgb(155, 42, 42);">
-                            Welcome, {{ user.username }}! </p>
-                        <h3>Your Orders</h3>
-                        {% if orders %}
-                        <ul>
-                            {% for order in orders %}
-                            <li>Order {{ order.id }} - ${{ order.TotalAmount }} - {{ order.PaymentStatus }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% else %}
-                        <p>You have no orders.</p>
-                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-3" style="background-color: #e9dac1;">
+                        <div class="card-header">Total Orders</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ total_orders }}</h5>
+                            <p class="card-text">View and manage all orders.</p>
+                            <a href="{% url 'admin_orders' %}" class="btn btn-light">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-3" style="background-color: #d2b48c;">
+                        <div class="card-header">Total Products</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ total_products }}</h5>
+                            <p class="card-text">Manage your products and inventory.</p>
+                            <a href="{% url 'admin_products' %}" class="btn btn-light">View Details</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Profile Section End -->
+    <!-- Admin Dashboard Section End -->
 
     <!-- footer section start -->
     <div class="footer_section layout_padding">
@@ -158,7 +145,6 @@
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
     <script src="{% static 'js/plugin.js' %}"></script>
-    <!-- sidebar -->
     <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
     <script>
