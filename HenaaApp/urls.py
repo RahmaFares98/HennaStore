@@ -19,7 +19,7 @@ urlpatterns = [
     path('admin_users/', admin_users, name='admin_users'),
     path('admin_orders/', AdminOrdersView.as_view(), name='admin_orders'),
     path('admin_orders/<int:order_id>/', views.admin_order_detail, name='admin_order_detail'),
-
+    path('admin_orders/delete/<int:order_id>/', views.admin_order_delete, name='admin_order_delete'),
     path('admin_dashboard/edit/<int:user_id>/', admin_user_edit_view, name='admin_user_edit'),
     path('admin_dashboard/users/delete/<int:user_id>/', admin_delete_user_view, name='admin_user_delete'),
     path('admin_products/', admin_product_list_view, name='admin_products'),

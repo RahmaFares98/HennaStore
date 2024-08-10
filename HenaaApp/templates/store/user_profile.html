@@ -45,7 +45,7 @@
         media="screen">
 </head>
 
-<body  id="main-content" class="backcolor">
+<body id="main-content" class="backcolor">
     <!-- banner bg main start -->
     <div class="banner_bg_main">
         <!-- header top section start -->
@@ -59,18 +59,6 @@
                                 <li><a href="{% url 'about' %}">About</a></li>
                                 <li><a href="#main_slider">Product</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
-                                {% if user_id %}
-                                <ul>
-                                    <li><a href="#"
-                                            onclick="document.getElementById('logout-form').submit();">Logout</a></li>
-                                </ul>
-                                <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
-                                    {% csrf_token %}
-                                </form>
-                                {% else %}
-                                <li> <a href="/login">Login</a></li>
-                                {% endif %}
-
                             </ul>
                         </div>
                     </div>
@@ -113,17 +101,33 @@
                 <div class="col-md-12">
                     <div class="detail-box">
                         <div class="heading_container">
-                            <h2>Your Profile</h2>
+                            <h1 style="margin-left:45% ;font-weight: bold;">Your Profile</h1>
                         </div>
-                        <p style="color: rgb(155, 42, 42);">
-                            Welcome, {{ user.username }}! </p>
-                        <h3>Your Orders</h3>
+                        <p  style="color: rgb(155, 42, 42);font-size: 30px; margin-left:42%;font-weight: bold; ">
+                            Welcome, {{ user.username }}!</p>
+                        <h3 style="margin-left:45% ;font-weight: bold;" >Your Orders</h3>
                         {% if orders %}
-                        <ul>
-                            {% for order in orders %}
-                            <li>Order {{ order.id }} - ${{ order.TotalAmount }} - {{ order.PaymentStatus }}</li>
-                            {% endfor %}
-                        </ul>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Total Amount</th>
+                                    <th>Payment Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>{{ order.id }}</td>
+                                    <td>${{ order.TotalAmount }}</td>
+                                    <td>{{ order.PaymentStatus }}</td>
+                                    <td>{{ order.OrderDate }}</td>
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                         {% else %}
                         <p>You have no orders.</p>
                         {% endif %}
@@ -147,7 +151,7 @@
                 </ul>
             </div>
             <div class="location_main">Help Line Number: <a
-                    href="https://wa.me/+972592222832?text=Hello%2C%20I%20need%20help>">+970 00000000</a></div>
+                    href="https://wa.me/+972592222832?text=Hello%2C%20I%20need%20help">+970 00000000</a></div>
         </div>
     </div>
     <!-- footer section end -->

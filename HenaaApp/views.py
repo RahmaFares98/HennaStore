@@ -18,7 +18,9 @@ from .forms import *
 from .payment_gateway import process_payment  # Custom payment gateway integration
 from django.contrib import messages
 from django.http import JsonResponse
+import logging
 
+logger = logging.getLogger(__name__)
 
 def home(request):
     user_id = request.session.get ('user_id')  # Fetch the user_id from the session if it exists
@@ -105,41 +107,6 @@ def checkout_view(request):
         form = PaymentForm()
 
     return render(request, 'store/checkout.html', {'order': order, 'order_items': order.orderitem_set.all(), 'form': form})
-
-def process_payment(request):
-    if 'user_id' not in request.session:
-        return redirect('/login')
-    
-    user_id = request.session['user_id']
-    # Assuming you're processing the payment for a specific order
-    try:
-        order = Order.objects.get(UserID=user_id, PaymentStatus='Pending')
-    except Order.DoesNotExist:
-        messages.error(request, "No pending order found.")
-        return redirect('cart')  # Redirect to cart if no pending order
-
-    if request.method == 'POST':
-        # Payment processing logic here
-        payment_data = request.POST  # This is where you would handle payment data
-
-        # Example of processing a payment (this is a placeholder for real payment logic)
-        payment_successful = True  # Replace with actual payment gateway logic
-        
-        if payment_successful:
-            # Update order status to paid
-            order.PaymentStatus = 'Paid'
-            order.save()
-
-            # Redirect to a payment success page
-            messages.success(request, "Payment successful!")
-            return redirect('payment_success')  # Assuming you have a success page
-        else:
-            # Handle payment failure
-            messages.error(request, "Payment failed. Please try again.")
-            return redirect('checkout')  # Redirect back to checkout on failure
-
-    # If the request method is GET, just render the payment page
-    return render(request, 'store/checkout.html', {'order': order})
 
 
 
@@ -536,10 +503,51 @@ def user_profile(request):
     
     return render(request, 'store/user_profile.html', context)
 
-
-def payment_success(request):
-    return render(request, 'store/payment_success.html')
-
 def admin_order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'admin_orders.html', {'order': order})
+
+def admin_order_delete(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if request.method == 'POST':
+        order.delete()
+        return redirect('admin_orders')  # Redirect to the list of orders after deletion
+    return redirect('admin_order_detail', order_id=order_id)  # Redirect back to the order detail page if not POST
+
+
+
+def process_payment(request):
+    if 'user_id' not in request.session:
+        logger.debug("User not logged in. Redirecting to login.")
+        return redirect('/login')
+    
+    user_id = request.session['user_id']
+    try:
+        order = Order.objects.get(UserID=user_id, PaymentStatus='Pending')
+    except Order.DoesNotExist:
+        logger.debug("No pending order found. Redirecting to cart.")
+        messages.error(request, "No pending order found.")
+        return redirect('cart')  # Redirect to cart if no pending order
+
+    if request.method == 'POST':
+        payment_data = request.POST
+        payment_successful = True  # Replace with actual payment gateway logic
+        
+        if payment_successful:
+            logger.debug("Payment successful. Updating order status.")
+            order.PaymentStatus = 'Paid'
+            order.save()
+
+            messages.success(request, "Payment successful!")
+            return redirect('payment_success')  # Assuming you have a success page
+        else:
+            logger.debug("Payment failed. Redirecting to checkout.")
+            messages.error(request, "Payment failed. Please try again.")
+            return redirect('checkout')  # Redirect back to checkout on failure
+
+    return render(request, 'store/checkout.html', {'order': order})
+
+
+
+def payment_success(request):
+    return render(request, 'store/payment_success.html')

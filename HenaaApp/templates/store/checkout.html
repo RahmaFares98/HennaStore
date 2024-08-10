@@ -65,17 +65,6 @@
                                 <li><a href="{% url 'about' %}">About</a></li>
                                 <li><a href="#main_slider">Product</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
-                                {% if user_id %}
-                                <ul>
-                                    <li><a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
-                                    </li>
-                                </ul>
-                                <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
-                                    {% csrf_token %}
-                                </form>
-                                {% else %}
-                                <li> <a href="/login">Login</a></li>
-                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -118,7 +107,7 @@
         <!-- A Stripe Element will be inserted here. -->
     </div>
     <div id="card-errors" role="alert"></div>
-            <button type="submit" class="btn btn-primary btn-block mt-4">Proceed to Payment</button>
+            <button type="submit" href="" class="btn btn-primary btn-block mt-4">Proceed to Payment</button>
             </form>
             </div>
     <script>

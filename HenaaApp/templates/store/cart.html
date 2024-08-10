@@ -59,17 +59,6 @@
                                 <li><a href="{% url 'about' %}">About</a></li>
                                 <li><a href="#main_slider">Product</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
-                                {% if user_id %}
-                                <ul>
-                                    <li><a href="#"
-                                            onclick="document.getElementById('logout-form').submit();">Logout</a></li>
-                                </ul>
-                                <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
-                                    {% csrf_token %}
-                                </form>
-                                {% else %}
-                                <li> <a href="/login">Login</a></li>
-                                {% endif %}
                             </ul>
                         </div>
                     </div>
