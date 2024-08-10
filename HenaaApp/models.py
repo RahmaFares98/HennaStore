@@ -83,11 +83,12 @@ class Order(models.Model):
     PaymentStatus = models.CharField(max_length=45)
     Created_at = models.DateTimeField(auto_now_add=True)
     Updated_at = models.DateTimeField(auto_now=True)
-    Processed_by = models.IntegerField()
+    Processed_by = models.ForeignKey(User, related_name='processed_orders', on_delete=models.CASCADE)  # Changed to ForeignKey
 
     def __str__(self):
         return f"Order {self.id} by {self.UserID}"
 
+    
 class OrderItem(models.Model):
     OrderID = models.ForeignKey(Order, on_delete=models.CASCADE)
     DressID = models.ForeignKey(Dress, on_delete=models.CASCADE)
@@ -121,3 +122,4 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review {self.id} by {self.UserID}"
+

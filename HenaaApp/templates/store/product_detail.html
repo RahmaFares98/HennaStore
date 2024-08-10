@@ -43,7 +43,7 @@
         media="screen">
 </head>
 
-<body class="backcolor">
+<body id="main-content" class="backcolor">
     <!-- banner bg main start -->
     <div class="banner_bg_main">
         <!-- header top section start -->
@@ -97,7 +97,7 @@
                         <a href="{% url 'about' %}">About</a>
                         <a href="{% url 'cart' %}">Cart</a>
                         <a href="{% url 'profile' %}">Profile</a>
-                        {% if user.is_authenticated %}
+                        {% if user_id %}
                         <a href="{% url 'logout' %}">Logout</a>
                         {% else %}
                         <a href="{% url 'login' %}">Login</a>
@@ -115,16 +115,31 @@
     <div class="product_detail_section">
         <div class="container">
             <div>
-                <h1 class="product_name">{{ dress.Name }}</h1>
-                <p class="product_description">{{ dress.Description }}</p>
+                <h1 class="product_name">Name: {{ dress.Name }}</h1>
+                <p class="product_description">Description :{{ dress.Description }}</p>
+                <p class="product_Size">Size :{{ dress.Size }}</p>
                 <p class="product_price">Price: ${{ dress.Price }}</p>
-                <p class="product_size">Size: {{ dress.Size }}</p>
                 <p class="product_color">Color: {{ dress.Color }}</p>
                 <p class="product_stock">Stock: {{ dress.StockQuantity }}</p>
                 <p class="product_category">Category: {{ dress.Category }}</p>
-                {% if user.is_authenticated %}
-                <a href="{% url 'add_to_cart' dress.id %}" class="btn btn-primary">Add to Cart</a>
-                {% endif %}
+                <form action="{% url 'add_to_cart' dress.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="sizeSelect">Choose Size:</label>
+                        <select id="sizeSelect" name="size" class="form-control" required>
+                            {% for size in available_sizes %}
+                            <option value="{{ size }}" {% ifequal selected_size size %}selected{% endifequal %}>
+                                {{ size }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% if user_id %}
+    <a class="btn btn-primary" href="{% url 'add_to_cart' dress.id %}">Add to Cart</a>
+                    {% else %}
+                    <p><a href="{% url 'login' %}">Log in</a> to add to cart.</p>
+                    {% endif %}
+                </form>
                 <a href="{% url 'home' %}" class="btn btn-secondary">Home</a>
             </div>
             <div class="row1">
@@ -147,7 +162,7 @@
                 <small>Reviewed on: {{ review.ReviewDate }}</small>
             </div>
             {% endfor %}
-            
+
             {% if user_id %}
             <div class="add_review">
                 <h3>Add Your Review</h3>
@@ -160,27 +175,28 @@
             {% else %}
             <p><a href="{% url 'login' %}">Log in</a> to add a review.</p>
             {% endif %}
-            </div>
-            </div>
-            <!-- Review Section End -->
-        
-<!-- footer section start -->
-<div class="footer_section layout_padding">
-    <div class="container">
-        <div class="footer_logo" style="font-weight: bolder;color: white;">Henna Store Project</div>
-        <div class="footer_menu">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                <li><a href="{% url 'home' %}#main_slider">Product</a></li>
-                <li><a href="{% url 'profile' %}">Profile</a></li>
-            </ul>
         </div>
-        <div class="location_main">Help Line Number: <a
-                href="https://wa.me/+972592222832?text=Hello%2C%20I%20need%20help>">+970 00000000</a></div>
     </div>
-</div>
-<!-- footer section end -->
+    <!-- Review Section End -->
+
+    <!-- footer section start -->
+    <div class="footer_section layout_padding">
+        <div class="container">
+            <div class="footer_logo" style="font-weight: bolder;color: white;">Henna Store Project</div>
+            <div class="footer_menu">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'home' %}#main_slider">Product</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                </ul>
+            </div>
+            <div class="location_main">Help Line Number: <a
+                    href="https://wa.me/+972592222832?text=Hello%2C%20I%20need%20help">+970 00000000</a></div>
+        </div>
+    </div>
+    <!-- footer section end -->
+
     <!-- Javascript files -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>

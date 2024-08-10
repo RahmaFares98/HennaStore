@@ -64,16 +64,7 @@
                                 <li><a href="{% url 'about' %}">About</a></li>
                                 <li><a href="#main_slider">Product</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
-                                {% if user_id %}
-                                <li>
-                                    <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
-                                </li>
-                                <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
-                                    {% csrf_token %}
-                                </form>
-                                {% else %}
-                                <li><a href="{% url 'login' %}">Login</a></li>
-                                {% endif %}
+                                <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
                             </ul>
                         </div>
                     </div>
@@ -98,16 +89,16 @@
     <!-- Admin Users Section Start -->
     <section class="about_section_layout_padding_1">
         <div class="container_1">
-            <div class="heading_container">
-                <h2>All Users</h2>
-                            {% if messages %}
-                            <ul class="messages list-group">
-                                {% for message in messages %}
-                                <li {% if message.tags %} class="{{ message.tags }} list-group-item list-group-item-danger m-1" {% endif %}>
-                                    {{ message }}</li>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
+            <div class="row">
+                <h1 style="margin-left:45% ;font-weight: bold;">All Users</h1>
+{% if messages %}
+<ul class="messages list-group">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }} list-group-item list-group-item-danger m-1" {% endif %}>{{
+        message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -123,85 +114,77 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for user in users %}
-                                <tr>
-                                    <td>{{ user.id }}</td>
-                                    <td>{{ user.username }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.created_at }}</td>
-                                    <td>
-                                        <!-- Edit Button triggers a modal -->
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-target="#editUserModal{{ user.id }}">
-                                            Edit
-                                        </button>
-                                        <!-- Delete Button triggers a confirmation -->
-                                        <button type="button" class="btn btn-danger" data-toggle="modal"
-                                            data-target="#deleteUserModal{{ user.id }}">
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <!-- Edit User Modal -->
-                                <div class="modal fade" id="editUserModal{{ user.id }}" tabindex="-1" role="dialog"
-                                    aria-labelledby="editUserModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editUserModalLabel">Edit User: {{user.username }}</h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <form method="post" action="{% url 'admin_user_edit' user.id %}">
-                                                {% csrf_token %}
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="username">Is Admin:</label>
-                                                        <select id="is_admin" name="is_admin" class="form-control">
-                                                            <option value="True" {% if user.is_admin %}selected{% endif %}>True</option>
-                                                            <option value="False" {% if not user.is_admin %}selected{% endif %}>False</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                                </div>
-                                            </form>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.created_at }}</td>
+                                <td>
+                                    <!-- Edit Button triggers a modal -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editUserModal{{ user.id }}">
+                                        Edit
+                                    </button>
+                                    <!-- Delete Button triggers a confirmation -->
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Edit User Modal -->
+                            <div class="modal fade" id="editUserModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editUserModalLabel">Edit User: {{user.username }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <!-- Delete User Confirmation Modal -->
-                                <div class="modal fade" id="deleteUserModal{{ user.id }}" tabindex="-1" role="dialog"
-                                    aria-labelledby="deleteUserModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="deleteUserModalLabel">Delete User: {{user.username }}</h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
+                                        <form method="post" action="{% url 'admin_user_edit' user.id %}">
+                                            {% csrf_token %}
                                             <div class="modal-body">
-                                                Are you sure you want to delete this user?
+                                                <div class="form-group">
+                                                    <label for="username">Is Admin:</label>
+                                                    <select id="is_admin" name="is_admin" class="form-control">
+                                                        <option value="True" {% if user.is_admin %}selected{% endif %}>True</option>
+                                                        <option value="False" {% if not user.is_admin %}selected{% endif %}>False</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Cancel</button>
-                                                <a href="{% url 'admin_user_delete' user.id %}"
-                                                    class="btn btn-danger">Delete</a>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
                                             </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Delete User Confirmation Modal -->
+                            <div class="modal fade" id="deleteUserModal{{ user.id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteUserModalLabel">Delete User: {{user.username }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete this user?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <a href="{% url 'admin_user_delete' user.id %}" class="btn btn-danger">Delete</a>
                                         </div>
                                     </div>
                                 </div>
-
-                                {% endfor %}
+                            </div>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>

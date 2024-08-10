@@ -45,7 +45,7 @@
 
 <body>
     <!-- banner bg main start -->
-    <div class="banner_bg_main">
+    <div id="main-content" class="banner_bg_main">
         <!-- header top section start -->
         <div class="container">
             <div class="header_section_top">
@@ -58,17 +58,19 @@
                                 <li><a href="#main_slider">Product</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
                                 {% if user_id %}
-                                <ul>
-                                    <li><a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a></li>
-                                </ul>
+                                <li>
+                                    <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+                                </li>
                                 <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
                                     {% csrf_token %}
                                 </form>
-                                {% else %}
-                                <li> <a href="/login">Login</a></li>
+                                {% if is_admin %}
+                                <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
                                 {% endif %}
-
-
+                                {% else %}
+                                <li><a href="/login">Login</a></li>
+                                <li><a href="/register">Register</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -117,22 +119,38 @@
                         </div>
                     </div>
                     <div class="main">
-                        <!-- Another variation with a button -->
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search this blog">
-                            <div class="input-group-append">
-                                <button class="btn btn-secondary" type="button"
-                                    style="background-color: #be8367; border-color:#fab696 ">
-                                    <i class="fa fa-search"></i>
-                                </button>
+                        <!-- Search Form -->
+                        <form method="GET" action="">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="q" placeholder="Search for dresses"
+                                    value="{{ request.GET.q|default:'' }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary" type="submit" style="background-color: #be8367; border-color:#fab696">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        {% for result in results %}
-                        <div class="search-result-item">
-                            <h3>{{ result.Name }}</h3>
-                            <p>{{ result.Description }}</p>
-                        </div>
-                        {% endfor %}
+                        </form>
+                        
+                        <!-- Search Results -->
+                        {% if query %}
+                        <h3>Search Results for "{{ query }}"</h3>
+                        {% if results %}
+                        <ul>
+                            {% for dress in results %}
+                            <li><a href="{% url 'dress_detail' dress.id %}">{{ dress.Name }}</a> - {{ dress.Description }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p>No results found for "{{ query }}".</p>
+                        {% endif %}
+                        {% else %}
+                        <ul>
+                            {% for dress in results %}
+                            <li><a href="{% url 'dress_detail' dress.id %}">{{ dress.Name }}</a> - {{ dress.Description }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
                     </div>
                     <div class="header_box">
                         <div class="lang_box">
@@ -223,13 +241,9 @@
                                         <div class="tshirt_img"><img src="{{ dress.ImageURL }}" alt="{{ dress.Name }}">
                                         </div>
                                         <div class="btn_main">
-                                            <div class="buy_bt"><a href="{% url 'product_detail' dress.id %}">Buy
-                                                    Now</a>
-                                            </div>
                                             <div class="seemore_bt"><a href="{% url 'product_detail' dress.id %}">See
                                                     More</a></div>
                                         </div>
-                                        <div class="new"><span>New</span></div>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -271,10 +285,7 @@
                                             <div class="buy_bt"><a href="{% url 'product_detail' dress.id %}">Buy
                                                     Now</a>
                                             </div>
-                                            <div class="seemore_bt"><a href="{% url 'product_detail' dress.id %}">See
-                                                    More</a></div>
                                         </div>
-                                        <div class="new"><span>New</span></div>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -324,42 +335,7 @@
     <!-- sidebar -->
     <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
-    <script>
-        function openNav() {
-            document.getElementById("mySidenav").style.width = "250px";
-        }
 
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-
-        document.getElementById('search-button').addEventListener('click', function () {
-            const query = document.getElementById('search-input').value;
-            if (query) {
-                fetchResults(query);
-            }
-        });
-
-        document.getElementById('search-input').addEventListener('keypress', function (event) {
-            if (event.key === 'Enter') {
-                const query = event.target.value;
-                if (query) {
-                    fetchResults(query);
-                }
-            }
-        });
-
-        function fetchResults(query) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `/search?q=${query}`, true);
-            xhr.onload = function () {
-                if (this.status === 200) {
-                    document.getElementById('search-results').innerHTML = this.responseText;
-                }
-            };
-            xhr.send();
-        }
-    </script>
 </body>
 
 </html>
