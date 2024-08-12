@@ -1,0 +1,128 @@
+/* General Styles */
+body {
+    background-color: #f9f9f9;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    text-align: center;
+        font-weight: bold;
+} 
+
+/* Cart Content */
+#cart-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+#cart-content h1 {
+    font-size: 2.5rem;
+    color: #e2815b;
+    margin-bottom: 20px;
+}
+
+#cart-content ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#cart-content li {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+#cart-content li img {
+    width: 100px;
+    height: auto;
+    margin-right: 10px;
+}
+
+#cart-content li div {
+    flex-grow: 1;
+    font-size: 1rem;
+}
+
+#cart-content select {
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#cart-content .btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+#cart-content .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+#cart-content .btn-primary {
+    background-color: #e2815b;
+    border-color: #e2815b;
+    color: #fff;
+    margin-top: 20px;
+}
+
+#cart-content .btn-secondary {
+    background-color: #555;
+    border-color: #555;
+    color: #fff;
+    margin-top: 10px;
+}
+
+/* Text Centering */
+#cart-content p {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+/* Footer Styling */
+.footer_section {
+    background-color: rgb(7, 7, 7);
+    padding: 20px 0;
+    color: #fff;
+    text-align: center;
+}
+
+.footer_section .footer_logo {
+    font-weight: bolder;
+    font-size: 1.5rem;
+}
+
+.footer_section .footer_menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.footer_section .footer_menu ul li {
+    display: inline-block;
+}
+
+.footer_section .footer_menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer_section .location_main a {
+    color: #fff;
+    text-decoration: none;
+}

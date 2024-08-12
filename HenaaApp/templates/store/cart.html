@@ -1,51 +1,33 @@
+<!-- cart Bage -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <!-- Load static template tag library -->
     {% load static %}
-    <title>Henna Store - {{ dress.Name }}</title>
-
-    <!-- basic -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- mobile metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <!-- site metas -->
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- bootstrap css -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Henna Store-cart</title>
+    <meta name="keywords" content="Palestinian dresses, Henna Store, Traditional clothing">
+    <meta name="description" content="Explore a variety of traditional and modern Palestinian dresses at Henna Store.">
+    <meta name="author" content="Henna Store Team">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-    <!-- style css -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/Style_1.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/about_sty.css' %}">
-
-    <!-- Responsive -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_s.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-    <!-- fevicon -->
     <link rel="icon" href="{% static 'images/Icon.png' %}" type="image/gif" />
-    <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/jquery.mCustomScrollbar.min.css' %}">
-    <!-- Tweaks for older IEs -->
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-    <!-- fonts -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-    <!-- font awesome -->
-    <link rel="stylesheet" type="text/css"
-        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- owl stylesheets -->
-    <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext"
-        rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
         media="screen">
 </head>
 
-<body id="main-content" class="backcolor">
+<body>
     <!-- banner bg main start -->
     <div class="banner_bg_main">
         <!-- header top section start -->
@@ -57,8 +39,22 @@
                             <ul>
                                 <li><a href="{% url 'home' %}">Home</a></li>
                                 <li><a href="{% url 'about' %}">About</a></li>
-                                <li><a href="#main_slider">Product</a></li>
+                                <li><a href="{% url 'home' %}#main_slider">Product</a></li>
                                 <li><a href="{% url 'profile' %}">Profile</a></li>
+                                {% if user_id %}
+                                <li>
+                                    <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+                                </li>
+                                <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+                                    {% csrf_token %}
+                                </form>
+                                {% if is_admin %}
+                                <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
+                                {% endif %}
+                                {% else %}
+                                <li><a href="/login">Login</a></li>
+                                <li><a href="/register">Register</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -76,45 +72,61 @@
                 </div>
             </div>
         </div>
-        <!-- logo section end -->
-        <!-- header section start -->
-        <div class="login_menu">
-            <ul>
-                <li><a href="#">
-                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        <span class="padding_10">Cart</span></a>
-                </li>
-                <li><a href="#">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <span class="padding_10">Profile</span></a>
-                </li>
-            </ul>
-        </div>
-        <!-- header section end -->
     </div>
-    <!-- banner bg main end -->
 
+    <!-- Cart Content -->
+<div id="cart-content" class="backcolor">
     <section class="about_section_layout_padding_1">
-    <h1 style="margin-left:45% ;font-weight: bold;">Your Cart</h1>
-    {% if order_items %}
-    <ul  style="margin-left:30% ;font-weight: bold;">
-        {% for item in order_items %}
-        <li  style="margin-left:20% ;">{{ item.DressID.Name }} - ${{ item.Price }} x {{ item.Quantity }}</li>
-        {% endfor %}
-    </ul>
-    <p  style="margin-left:45% ;" >Total: ${{ order.TotalAmount }}</p>
-<a href="{% url 'checkout' %}" class="btn btn-primary btn-block mt-4" style="background-color:  #e2815b; color: #000;">Proceed to Checkout</a>
-    {% else %}
-    <p>Your cart is empty.</p>
-    {% endif %}
-<a href="{% url 'home' %}" class="btn btn-block mt-3" style="background-color: #dd8a69; color: #000;">Home</a>
+        <h1 style="text-align: center; font-weight: bold;">Your Cart</h1>
+        {% if order_items %}
+        <ul style="list-style-type: none; padding-left: 0;">
+            {% for item in order_items %}
+            <li
+                style="margin-left:20%; display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #ccc;">
+                <img src="{{ item.DressID.ImageURL }}" alt="{{ item.DressID.Name }}"
+                    style="width: 100px; height: auto; vertical-align: middle; margin-right: 10px;">
+                <div style="flex-grow: 1;">
+                    {{ item.DressID.Name }} - Size: {{ item.size }} - ${{ item.Price }} x {{ item.Quantity }}
+                </div>
+                <form method="post" action="{% url 'update_cart' item.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <select name="quantity" onchange="this.form.submit()" style="margin-left: 10px;">
+                        {% for i in quantity_range %}
+                        <option value="{{ i }}" {% ifequal item.Quantity i %} selected="selected" {% endifequal %}>
+                            {{ i }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </form>
+
+                <!-- Remove/Cancel Button -->
+                <form method="post" action="{% url 'remove_from_cart' item.id %}"
+                    style="display: inline; margin-left: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        <p style="text-align: center;">Total: ${{ order.TotalAmount }}</p>
+        <div style="text-align: center;">
+            <a href="{% url 'checkout' %}" class="btn btn-primary btn-block mt-4"
+                style="background-color: #e2815b; color: #000;">Proceed to Checkout</a>
+                <a href="{% url 'home' %}" class="btn btn-secondary btn-block mt-2" style="color: #000;">Home</a>
+        </div>
+        
+        {% else %}
+        <p style="text-align: center;">Your cart is empty.</p>
+        <a href="{% url 'home' %}" class="btn btn-block mt-3" style="background-color: #dd8a69; color: #000;">Home</a>
+        {% endif %}
     </section>
-    <!-- About Section End -->
+</div>
+<!-- cart end  -->
 
     <!-- footer section start -->
     <div class="footer_section layout_padding">
         <div class="container">
-            <div class="footer_logo" style="font-weight: bolder;color: rgb(173, 97, 84);">Henna Store Project</div>
+            <div class="footer_logo" style="font-weight: bolder;color: white;">Henna Store Project</div>
             <div class="footer_menu">
                 <ul>
                     <li><a href="{% url 'home' %}">Home</a></li>
@@ -124,7 +136,7 @@
                 </ul>
             </div>
             <div class="location_main">Help Line Number: <a
-                    href="https://wa.me/+972592222832?text=Hello%2C%20I%20need%20help>">+970 00000000</a></div>
+                    href="https://wa.me/+972592222832?text=Hello%2C%20I%20need%20help">+970 00000000</a></div>
         </div>
     </div>
     <!-- footer section end -->
@@ -135,18 +147,9 @@
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
     <script src="{% static 'js/plugin.js' %}"></script>
-    <!-- sidebar -->
     <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
-    <script>
-        function openNav() {
-            document.getElementById("mySidenav").style.width = "250px";
-        }
 
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-    </script>
 </body>
 
 </html>

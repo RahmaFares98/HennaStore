@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 from django.contrib.admin import SimpleListFilter
-
+#decorator is used to func the -- model with the Django admin site 
 # Custom action to mark orders as shipped
 @admin.action(description='Mark selected orders as shipped')
 def make_shipped(modeladmin, request, queryset):
@@ -59,7 +59,7 @@ class OrderItemAdmin(admin.ModelAdmin):
     ordering = ('OrderID',)
 
 # Registering the Payment model with custom admin options
-@admin.register(Payment)
+@admin.register(Payment) 
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('OrderID', 'PaymentDate', 'PaymentAmount', 'PaymentMethod')
     search_fields = ('OrderID__id', 'PaymentMethod')

@@ -296,7 +296,6 @@ button {
 
 
 /* opennav bar start */
-
 .sidenav {
   height: 100%;
   width: 0;
@@ -313,14 +312,14 @@ button {
 .sidenav a {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
-  font-size: 20px;
-  color: #ffffff;
+  font-size: 25px;
+  color: #818181;
   display: block;
   transition: 0.3s;
 }
 
 .sidenav a:hover {
-  color: #f26522;
+  color: #f1f1f1;
 }
 
 .sidenav .closebtn {
@@ -331,6 +330,10 @@ button {
   margin-left: 50px;
 }
 
+.toggle_icon {
+  font-size: 30px;
+  cursor: pointer;
+}
 @media screen and (max-height: 450px) {
   .sidenav {
     padding-top: 15px;
@@ -871,6 +874,7 @@ input.mail_bt::placeholder {
 /* Product detail section styles */
 .product_detail_section {
   background-color: #fff;
+ 
   padding: 50px 0;
 }
 
@@ -886,7 +890,8 @@ input.mail_bt::placeholder {
 
 .product_detail_section .container .row1 {
   margin-left: 150px;
-  width:150%
+  width:150%;
+  margin-top: 10%;
 }
 
 .product_detail_section .product_name {
@@ -985,7 +990,7 @@ input.mail_bt::placeholder {
   font-size: 14px;
   color: #777;
 }
-
+/* review section */
 .add_review {
   margin-top: 40px;
 }
@@ -1025,4 +1030,6 @@ input.mail_bt::placeholder {
   background-color: #e65e5e;
 }
 
+
+/* review section */
 

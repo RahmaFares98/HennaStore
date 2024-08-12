@@ -95,10 +95,11 @@ class OrderItem(models.Model):
     Quantity = models.IntegerField()
     Price = models.DecimalField(max_digits=10, decimal_places=2)
     Created_at = models.DateTimeField(auto_now_add=True)
+    size = models.CharField(max_length=50, null=False, blank=False)  # or use a default value if needed
     Updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"OrderItem {self.id} for Order {self.OrderID}"
+        return f"{self.DressID.Name} - {self.size}"
 
 class Payment(models.Model):
     OrderID = models.ForeignKey(Order, on_delete=models.CASCADE)

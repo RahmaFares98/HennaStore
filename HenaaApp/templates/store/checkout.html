@@ -1,16 +1,14 @@
-
+<!-- checkout -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>Stripe Test</title>
+    <title>Henna Store Checkout</title>
     <head>
         <!-- Load static template tag library -->
         {% load static %}
         <title>Henna Store - {{ dress.Name }}</title>
     
         <!-- basic -->
-         
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,7 +23,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
         <!-- style css -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/Style_1.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/about_sty.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
     
         <!-- Responsive -->
         <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
@@ -47,7 +45,6 @@
         <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
             media="screen">
-
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 
@@ -85,10 +82,11 @@
 
     <form id="payment-form" method="post" action="{% url 'process_payment' %}">
         {% csrf_token %}
+        <div></div>
         <h4>Shipping Information</h4>
         <div class="form-group">
-            <label style="color: white;" for="address">Address:</label>
-            <input type="text" class="form-control" id="address" name="address" required>
+            <label style="color: white;" for="Name">Name:</label>
+            <input type="text" class="form-control" id="Name" name="Name" required>
         </div>
         <div class="form-group">
             <label style="color: white;" for="city">City:</label>
@@ -99,34 +97,18 @@
             <input type="text" class="form-control" id="zip_code" name="zip_code" required>
         </div>
         <div class="form-group">
-            <label style="color: white;"  for="country">Country:</label>
+            <label style="color: white;" for="country">Country:</label>
             <input type="text" class="form-control" id="country" name="country" required>
         </div>
-
-    <div id="card-element"  style="border: 1px solid #ccc; background-color: wheat; padding: 10px;">
-        <!-- A Stripe Element will be inserted here. -->
-    </div>
-    <div id="card-errors" role="alert"></div>
-            <button type="submit" href="" class="btn btn-primary btn-block mt-4">Proceed to Payment</button>
-            </form>
-            </div>
-    <script>
-        var stripe = Stripe('your_publishable_key'); // Replace with your actual publishable key
-        var elements = stripe.elements();
-
-        var card = elements.create('card');
-        card.mount('#card-element');
-
-        card.on('change', function (event) {
-            var displayError = document.getElementById('card-errors');
-            if (event.error) {
-                displayError.textContent = event.error.message;
-            } else {
-                displayError.textContent = '';
-            }
-        });
-    </script>
-
+    
+        <div id="card-element" style="border: 1px solid #ccc; background-color: wheat; padding: 10px;">
+            <!-- A Stripe Element will be inserted here. -->
+        </div>
+        <div id="card-errors" role="alert" style="color: red;"></div>
+    
+        <button type="submit" class="btn btn-primary btn-block mt-4">Proceed to Payment</button>
+    </form>
+    
 <!-- footer section start -->
 <div class="footer_section layout_padding">
     <div class="container">
@@ -145,5 +127,61 @@
 </div>
 <!-- footer section end -->
 </body>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('pk_test_51PmKaBP94pbCvQFRiehdJoFn2IkrPojnw2MSkAEPPoWCWTEDAYCAbkyotXbScPOZkWahdhKLhQiN6Vc7XLm05BOz00HFVvk75L');
+    var elements = stripe.elements();
 
+    var style = {
+        base: {
+            color: '#32325d',
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            fontSmoothing: 'antialiased',
+            fontSize: '16px',
+            '::placeholder': {
+                color: '#aab7c4'
+            }
+        },
+        invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+        }
+    };
+
+    var card = elements.create('card', { style: style });
+    card.mount('#card-element');
+
+    card.on('change', function (event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        stripe.createToken(card).then(function (result) {
+            if (result.error) {
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                stripeTokenHandler(result.token);
+            }
+        });
+    });
+
+    function stripeTokenHandler(token) {
+        var form = document.getElementById('payment-form');
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        form.appendChild(hiddenInput);
+        form.submit();
+    }
+</script>
 </html>

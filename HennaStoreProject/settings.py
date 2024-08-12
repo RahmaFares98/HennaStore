@@ -12,7 +12,14 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import pymysql
 pymysql.install_as_MySQLdb()
 
+
 import os
+
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+
+STRIPE_SECRET_KEY = "sk_test_51PmKaBP94pbCvQFRSPQIAcWeSTBCbjr5RB2M5FrzvzfOdkUPOHpc9u2fYD2mp6fNHsyy7kzgyw3obSh4RIw00GJQ00KE7tQv6l"
+STRIPE_PUBLISHABLE_KEY = "pk_test_51PmKaBP94pbCvQFRiehdJoFn2IkrPojnw2MSkAEPPoWCWTEDAYCAbkyotXbScPOZkWahdhKLhQiN6Vc7XLm05BOz00HFVvk75L"
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,8 +36,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STRIPE_SECRET_KEY = "sk_test_51PmKaBP94pbCvQFRSPQIAcWeSTBCbjr5RB2M5FrzvzfOdkUPOHpc9u2fYD2mp6fNHsyy7kzgyw3obSh4RIw00GJQ00KE7tQv6l"
-STRIPE_PUBLISHABLE_KEY = "pk_test_51PmKaBP94pbCvQFRiehdJoFn2IkrPojnw2MSkAEPPoWCWTEDAYCAbkyotXbScPOZkWahdhKLhQiN6Vc7XLm05BOz00HFVvk75L"
 # Application definition
 
 #AUTH_USER_MODEL = 'HenaaApp.CustomUser'

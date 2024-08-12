@@ -1,3 +1,9 @@
+<!--  Hennastoreproject founded by Engineer Rahma Fares,is a unique shopping platform dedicated to showcasing traditional. using django framwork
+with (AXSOS Academy)
+Instructor: Nasri Ladaa
+Assistant: Fatmeh Harashsheh
+Email:rahmafaris981@gmail.com
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,9 +17,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!-- site metas -->
     <title>Henna Store Project</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="keywords" content="Palestinian dresses, Henna Store, Traditional clothing">
+    <meta name="description" content="Explore a variety of traditional and modern Palestinian dresses at Henna Store.">
+    <meta name="author" content="Henna Store Team">
     <!-- bootstrap css -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -29,14 +35,8 @@
     <link rel="icon" href="{% static 'images/Icon.png' %}" type="image/gif" />
     <!-- scrollbar custom css -->
     <link rel="stylesheet" href="{% static 'css/jquery.mCustomScrollbar.min.css' %}">
-    <!-- font awesome -->
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- owl stylesheets -->
-    <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext"
-        rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
@@ -93,22 +93,24 @@
         <div class="header_section">
             <div class="container">
                 <div class="containt_main">
-                    <div id="mySidenav" class="sidenav">
-                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                        <a href="{% url 'home' %}">Home</a>
-                        <a href="{% url 'about' %}">About</a>
-                        <a href="{% url 'cart' %}">Cart</a>
-                        <a href="{% url 'profile' %}">Profile</a>
-                        <a href="#main_slider">Product</a>
-                        {% if user_id %}
-                        <a href="{% url 'logout' %}">Logout</a>
-                        {% else %}
-                        <a href="{% url 'login' %}">Login</a>
-                        <a href="{% url 'register' %}">Register</a>
-                        {% endif %}
-                    </div>
-                    <span class="toggle_icon" onclick="openNav()"><img
-                            src="{% static 'images/toggle-icon.png' %}"></span>
+                <div id="mySidenav" class="sidenav">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                    <a href="{% url 'home' %}">Home</a>
+                    <a href="{% url 'about' %}">About</a>
+                    <a href="{% url 'cart' %}">Cart</a>
+                    <a href="{% url 'profile' %}">Profile</a>
+                    <a href="#main_slider">Product</a>
+                    {% if user_id %}
+                    <a href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                    <a href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </div>
+                
+                <span class="toggle_icon" onclick="openNav()">
+                    <img src="{% static 'images/toggle-icon.png' %}">
+                </span>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Categories
@@ -120,47 +122,34 @@
                     </div>
                     <div class="main">
                         <!-- Search Form -->
-                        <form method="GET" action="">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="q" placeholder="Search for dresses"
-                                    value="{{ request.GET.q|default:'' }}">
-                                <div class="input-group-append">
-                                    <button class="btn btn-secondary" type="submit" style="background-color: #be8367; border-color:#fab696">
-                                        <i class="fa fa-search"></i>
-                                    </button>
+                        <form method="GET" action="{% url 'home' %}">
+                            <input type="text" name="q" placeholder="Search for a dress..." value="{{ query }}"
+                                class="form-control mb-3">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                        <!-- Search Results -->
+                        <div class="row mt-4">
+                            {% if results %}
+                            {% for dress in results %}
+                            <div class="col-md-4">
+                                <div class="card mb-4">
+                                    <img src="{{ dress.ImageURL }}" class="card-img-top" alt="{{ dress.Name }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ dress.Name }}</h5>
+                                        <p class="card-text">${{ dress.Price }}</p>
+                                        <!-- Link to search detail page -->
+                                        <a href="{% url 'search_detail' dress.id %}" class="btn btn-primary">View
+                                            Details</a>
+                                    </div>
                                 </div>
                             </div>
-                        </form>
-                        
-                        <!-- Search Results -->
-                        {% if query %}
-                        <h3>Search Results for "{{ query }}"</h3>
-                        {% if results %}
-                        <ul>
-                            {% for dress in results %}
-                            <li><a href="{% url 'dress_detail' dress.id %}">{{ dress.Name }}</a> - {{ dress.Description }}</li>
                             {% endfor %}
-                        </ul>
-                        {% else %}
-                        <p>No results found for "{{ query }}".</p>
-                        {% endif %}
-                        {% else %}
-                        <ul>
-                            {% for dress in results %}
-                            <li><a href="{% url 'dress_detail' dress.id %}">{{ dress.Name }}</a> - {{ dress.Description }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
+                            {% else %}
+                            <p>No results found.</p>
+                            {% endif %}
+                        </div>
                     </div>
                     <div class="header_box">
-                        <div class="lang_box">
-                            <a href="/english" title="Language" class="nav-link" data-toggle="dropdown"
-                                aria-expanded="true">
-                                <img src="{% static 'images/flag-uk.png' %}" alt="flag" class="mr-2" title="English">
-                                English
-                                <i class="fa fa-angle-down ml-2" aria-hidden="true"></i>
-                            </a>
-                        </div>
                         <div class="login_menu">
                             <ul>
                                 <li><a href="/cart">
@@ -223,8 +212,8 @@
     <div class="fashion_section">
         <div id="main_slider" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
-                <!-- Modern Traditional Thobe Section -->
-                {% for group in grouped_dresses.modern %}
+                <!--  Traditional Thobe Section -->
+                {% for group in grouped_dresses.traditional %}
                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
                     <div class="container">
                         <br>
@@ -235,14 +224,15 @@
                                 <div class="col-lg-4 col-sm-4">
                                     <div class="box_main">
                                         <h4 class="shirt_text">{{ dress.Name }}</h4>
-                                        <p class="price_text">Price <span style="color: #262626;">${{
-                                                dress.Price}}</span>
+                                        <p class="price_text">Price <span
+                                                style="color: #262626;">${{dress.Price}}</span>
                                         </p>
                                         <div class="tshirt_img"><img src="{{ dress.ImageURL }}" alt="{{ dress.Name }}">
                                         </div>
                                         <div class="btn_main">
-                                            <div class="seemore_bt"><a href="{% url 'product_detail' dress.id %}">See
-                                                    More</a></div>
+                                            <div class="buy_bt"><a href="{% url 'product_detail' dress.id %}">Buy
+                                                    Now</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -265,19 +255,19 @@
 
         <div id="Second_slider" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
-                <!-- Modern Traditional Thobe Section -->
-                {% for group in grouped_dresses.traditional %}
+                <!-- Traditional Thobe Section -->
+                {% for group in grouped_dresses.modern %}
                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
                     <div class="container">
-                        <h1 class="fashion_taital"> Traditional Thobe</h1>
+                        <h1 class="fashion_taital">Traditional Thobe</h1>
                         <div class="fashion_section_2">
                             <div class="row">
                                 {% for dress in group %}
                                 <div class="col-lg-4 col-sm-4">
                                     <div class="box_main">
                                         <h4 class="shirt_text">{{ dress.Name }}</h4>
-                                        <p class="price_text">Price <span style="color: #262626;">${{
-                                                dress.Price}}</span>
+                                        <p class="price_text">Price <span
+                                                style="color: #262626;">${{dress.Price}}</span>
                                         </p>
                                         <div class="tshirt_img"><img src="{{ dress.ImageURL }}" alt="{{ dress.Name }}">
                                         </div>
@@ -295,12 +285,15 @@
                 </div>
                 {% endfor %}
             </div>
-            <a class="carousel-control-prevv" href="#Second_slider" role="button" data-slide="prev">
-                <i class="fa fa-angle-left"></i>
-            </a>
-            <a class="carousel-control-nextt" href="#Second_slider" role="button" data-slide="next">
-                <i class="fa fa-angle-right"></i>
-            </a>
+                        <a class="carousel-control-prevv" href="#Second_slider" role="button" data-slide="prev">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                        <a class="carousel-control-nextt" href="#Second_slider" role="button" data-slide="next">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+            </div>
+
+            </div>
         </div>
     </div>
     </div>
@@ -335,7 +328,15 @@
     <!-- sidebar -->
     <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
+<script>
+    function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
 
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+</script>
 </body>
 
 </html>

@@ -1,8 +1,10 @@
+/* carousel style */
+
 .carousel-control-prevv,
 .carousel-control-nextt {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    /* Changed from absolute to fixed for better control */
+    bottom: 20px;
+    /* Position above the footer */
     width: 55px;
     height: 55px;
     background-color: #30302e;
@@ -12,19 +14,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 2;
+    /* Ensures controls are above other elements */
+    cursor: pointer;
+    border-radius: 50%;
+    /* Makes the controls circular */
 }
 
 .carousel-control-prevv {
-    left: 615px;
-    top: 105%;
+    left: 10%;
+    /* Adjust as needed to position control horizontally */
 }
 
 .carousel-control-nextt {
-    right: 615px;
-    top: 105%;
+    right: 10%;
+    /* Adjust as needed to position control horizontally */
 }
 
+/* Hover and Focus Effects */
 .carousel-control-prevv:focus,
 .carousel-control-prevv:hover,
 .carousel-control-nextt:focus,

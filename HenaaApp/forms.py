@@ -1,7 +1,9 @@
+# use django forms
 from django import forms
-from .models import Review
+from .models import *
 
-class ReviewForm(forms.ModelForm):
+class ReviewForm(forms.ModelForm): #ModelForm: Inherits from forms.ModelForm
+    #the Meta class provides options for controlling things like database table names, ordering, verbose names
     class Meta:
         model = Review
         fields = ['Comment', 'Rating']

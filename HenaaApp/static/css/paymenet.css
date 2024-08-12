@@ -1,0 +1,127 @@
+/* Base Styles */
+body,
+html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    /* Light background to make content stand out */
+}
+
+/* Header Section */
+.banner_bg_main {
+    background-color: #292321;
+    /* Henna-inspired color */
+    padding: 20px 0;
+    color: #fff;
+}
+
+.custom_menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.custom_menu ul li {
+    margin: 0 15px;
+}
+
+.custom_menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.custom_menu ul li a:hover {
+    color: #ffe4b5;
+    /* Light shade for hover effect */
+}
+
+.logo_section .banner_taital {
+    font-size: 36px;
+    font-weight: bold;
+    color: #ffe4b5;
+    /* Light henna shade */
+    margin-top: 20px;
+}
+
+/* Payment Success Message */
+.payment_success {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    text-align: center;
+    border-top: 5px solid #a0522d;
+    /* Henna-colored border to tie in branding */
+}
+
+.payment_title {
+    font-size: 32px;
+    color: #a0522d;
+    /* Henna color */
+}
+
+.lead {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Action Buttons */
+.action_buttons .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin: 10px 5px;
+    text-transform: uppercase;
+}
+
+.btn-secondary {
+    background-color: #8b4513;
+    /* Darker henna-inspired color */
+    color: #fff;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a2d18;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #a0522d;
+    /* Henna color */
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #8b4513;
+    /* Darker henna color */
+    color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .payment_success {
+        padding: 20px;
+        margin-top: 30px;
+    }
+
+    .payment_title {
+        font-size: 28px;
+    }
+
+    .lead {
+        font-size: 16px;
+    }
+
+    .action_buttons .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

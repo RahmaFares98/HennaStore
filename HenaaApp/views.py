@@ -19,103 +19,14 @@ from .payment_gateway import process_payment  # Custom payment gateway integrati
 from django.contrib import messages
 from django.http import JsonResponse
 import logging
+# Initialize Stripe with your secret key
+stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 logger = logging.getLogger(__name__)
 
-def home(request):
-    user_id = request.session.get ('user_id')  # Fetch the user_id from the session if it exists
-    users = User.objects.all()  # Fetch the user_id from the session if it exists
-    dresses = Dress.objects.all()
-    is_admin = request.session.get('is_admin',False)  # Fetch the is_admin status, default to False if not set
 
-    modern_dresses = dresses[:6]  # First 6 dresses
-    traditional_dresses = dresses[6:]  # Remaining dresses
-
-    grouped_dresses = {
-        'modern': [modern_dresses[i:i + 3] for i in range(0, len(modern_dresses), 3)],
-        'traditional': [traditional_dresses[i:i + 3] for i in range(0, len(traditional_dresses), 3)]
-    }
-
-    context = {
-        'grouped_dresses': grouped_dresses,
-        'dresses': dresses,
-        'user_id': user_id,
-        'users':users,
-        'is_admin': is_admin,  # Pass the is_admin status to the template
-
-    }
-    
-    return render(request, 'store/home.html', context)
-
-
-
-# Initialize Stripe with your secret key
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
-def checkout_view(request):
-    if 'user_id' not in request.session:
-        return redirect('/login')
-    
-    user_id = request.session['user_id']
-    try:
-        order = Order.objects.get(UserID_id=user_id, PaymentStatus='Pending')
-    except Order.DoesNotExist:
-        return redirect('cart_empty')
-    
-    if request.method == 'POST':
-        # Handle form submission and payment processing here
-        pass
-    else:
-        # Create a Stripe Payment Intent
-        intent = stripe.PaymentIntent.create(
-            amount=int(order.TotalAmount * 100),  # Stripe expects the amount in cents
-            currency='usd',
-            metadata={'order_id': order.id}
-        )
-
-        return render(request, 'store/checkout.html', {
-            'order': order,
-            'order_items': order.orderitem_set.all(),
-            'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY,
-            'client_secret': intent.client_secret
-        })
-
-def checkout_view(request):
-    # Check if 'user_id' is in the session
-    user_id = request.session.get('user_id')
-    if not user_id:
-        return redirect('/login')
-
-    # Fetch the user's current order using an appropriate field (e.g., PaymentStatus)
-    try:
-        order = Order.objects.get(UserID_id=user_id, PaymentStatus='pending')  # Adjust this based on your model
-    except Order.DoesNotExist:
-        return redirect('cart_empty')  # Redirect to a page that shows the cart is empty
-
-    if request.method == 'POST':
-        form = PaymentForm(request.POST)
-        if form.is_valid():
-            # Process the payment with the cleaned data
-            payment_status = process_payment(order, form.cleaned_data)
-            if payment_status['status'] == 'success':
-                order.PaymentStatus = 'completed'  # Mark order as completed
-                order.save()
-                return redirect('payment_success')
-            else:
-                return render(request, 'store/checkout.html', {'order': order, 'form': form, 'error': payment_status['message']})
-    else:
-        form = PaymentForm()
-
-    return render(request, 'store/checkout.html', {'order': order, 'order_items': order.orderitem_set.all(), 'form': form})
-
-
-
-def user_profile(request):
-    if 'user_id' not in request.session:
-        return redirect('/login')
-    else:
-        orders = Order.objects.filter(UserID=request.user)
-    return render(request, 'store/user_profile.html', {'orders': orders})
+##user Action ##
 
 def user_login(request):
     if request.method == 'POST':
@@ -171,9 +82,7 @@ def user_register(request):
             return redirect('/register')
         else:
             # Create the user as a normal user (non-admin)
-            user = models.create_user(
-                request.POST
-            )
+            user = create_user(request.POST)
 
             # Automatically log the user in
             request.session['user_id'] = user.id
@@ -182,86 +91,82 @@ def user_register(request):
                 
     return render(request, 'store/Register.html')
 
-def admin_create_user(request):
-    if not request.user.is_authenticated or not request.user.is_admin:
-        return HttpResponse("You do not have permission to access this page.")
 
-    if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        is_admin = request.POST.get('is_admin', False)
-
-        # Create the new user, with admin rights if specified
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-            is_admin=is_admin
-        )
-
-        messages.success(request, 'User created successfully!')
-        return redirect('admin_dashboard')
-
-    return render(request, 'admin/admin_create_user.html')
-
-def cart(request):
+def user_profile(request):
+    # Check if the user is logged in by verifying the session
     if 'user_id' not in request.session:
-        return redirect('/login')
-    else:
-        user_id = request.session['user_id']
-        user = get_object_or_404(User, pk=user_id)
+        return redirect('/login')  # Redirect to login page if not authenticated
 
-        # Initialize order and order_items
-        order = None
-        order_items = []
-
-        # Fetch the current pending order
-        try:
-            order = Order.objects.get(UserID=user, PaymentStatus='Pending')
-            order_items = order.orderitem_set.all()
-        except Order.DoesNotExist:
-            pass  # If no pending order, order_items remains empty and order is None
-
-        return render(request, 'store/cart.html', {'order_items': order_items, 'order': order})
-
-def add_to_cart(request, dress_id):
-    if 'user_id' not in request.session:
-        return redirect('/login')
-    else:
-        user_id = request.session['user_id']
-        user = get_object_or_404(User, pk=user_id)
-        dress = get_object_or_404(Dress, pk=dress_id)
-
-        # Get or create the order with PaymentStatus 'Pending'
-        order, created = Order.objects.get_or_create(
-            UserID=user, 
-            PaymentStatus='Pending', 
-            defaults={'TotalAmount': 0, 'Processed_by': user}
-        )
-
-        # Get or create the order item
-        order_item, created = OrderItem.objects.get_or_create(
-            OrderID=order, 
-            DressID=dress, 
-            defaults={'Quantity': 1, 'Price': dress.Price}
-        )
-        
-        if not created:
-            # If the item already exists in the order, increment the quantity
-            order_item.Quantity += 1
-            order_item.save()
-        
-        # Update the total amount in the order
-        order.TotalAmount += dress.Price
-        order.save()
-
-        # Debugging: Print order details to ensure correct creation
-        print(f"Order ID: {order.id}, Total Amount: {order.TotalAmount}, Items: {order.orderitem_set.count()}")
-
-        return redirect('cart')
-
+    # Assuming 'user_id' in session is the ID of the logged-in user
+    user_id = request.session['user_id']
     
+    # Fetch the user's orders using the correct field name
+    orders = Order.objects.filter(UserID=user_id)  # Use 'UserID' as it matches your model
+    
+    # Fetch the user object using the correct method
+    user = User.objects.get(id=user_id)
+    
+    # Prepare context for the template
+    context = {
+        'orders': orders,
+        'user': user
+    }
+    
+    return render(request, 'store/user_profile.html', context)
+
+##home##
+
+def home(request):
+    user_id = request.session.get ('user_id')  # Fetch the user_id from the session if it exists
+    users = User.objects.all()  # Fetch the user_id from the session if it exists
+    dresses = Dress.objects.all()
+    is_admin = request.session.get('is_admin',False)  # Fetch the is_admin status, default to False if not set
+
+    modern_dresses = dresses[:6]  # First 6 dresses
+    traditional_dresses = dresses[6:]  # Remaining dresses
+
+    grouped_dresses = {
+        'modern': [modern_dresses[i:i + 3] for i in range(0, len(modern_dresses), 3)],
+        'traditional': [traditional_dresses[i:i + 3] for i in range(0, len(traditional_dresses), 3)]
+    }
+    # Handle search functionality
+    query = request.GET.get('q')  # Get the search term from the query string
+    if query:
+        results = Dress.objects.filter(Name__icontains=query)  # Filter the Dress model based on the search term
+    else:
+        results = []  # If no search term, return an empty list
+    context = {
+    'grouped_dresses': grouped_dresses,
+    'dresses': dresses,
+    'user_id': user_id,
+    'query': query,
+    'results': results,  # These are the filtered results based on the search query
+    'users':users,
+    'is_admin': is_admin,  # Pass the is_admin status to the template
+    }
+    return render(request, 'store/home.html', context)
+
+
+def dress_list(request):
+    query = request.GET.get('q')  # Get the search term from the query string
+    
+    if query:
+        results = Dress.objects.filter(Name__icontains=query)  # Filter the Dress model based on the search term
+    else:
+        results = Dress.objects.all()  # Show all dresses if no search term
+    
+    # Prepare the context with search results and query
+    context = {
+        'results': results,
+        'query': query,
+    }
+    
+    return render(request, 'store/home.html', context)
+
+def search_detail(request, dress_id):
+    dress = get_object_or_404(Dress, id=dress_id)
+    return redirect(f'/products/{dress_id}/')
+
 def payment(request):
     if 'user_id' not in request.session:
         return redirect('/login')
@@ -285,19 +190,16 @@ def payment(request):
                 return redirect('home')
         return render(request, 'store/payment.html')
 
-
+#About bage #
 def about(request):
-    return render(request, 'store/about.html')
-
-
-def dress_list(request):
-    query = request.GET.get('q')
-    if query:
-        results = Dress.objects.filter(Name__icontains=query)  # Adjust the filter as per your model fields
+    if 'user_id' not in request.session:
+        return redirect('/login')
     else:
-        results = Dress.objects.all()  # Show all dresses if no search term
-    
-    return render(request, 'home.html', {'results': results, 'query': query})
+        user_id = request.session['user_id']
+    return render(request, 'store/about.html' ,{ 'user_id': user_id,})
+
+
+#Product Detail Page #
 def product_detail(request, dress_id):
     if 'user_id' not in request.session:
         return redirect('/login')
@@ -307,10 +209,12 @@ def product_detail(request, dress_id):
         dress = get_object_or_404(Dress, id=dress_id)
         reviews = Review.objects.filter(DressID=dress).order_by('-ReviewDate')
         review_form = ReviewForm()
-        selected_size = request.POST.get('size', None)
+        selected_size = request.POST.get('Size', None)
 
-        # Assuming `available_sizes` is a CharField with comma-separated sizes
-        available_sizes = dress.Size.split(',')  # Example: "S,M,L" -> ['S', 'M', 'L']
+        available_sizes = dress.Size.split(',') if dress.Size else []
+
+        if not selected_size and available_sizes:
+            selected_size = available_sizes[0]  # Default to the first available size
 
         context = {
             'dress': dress,
@@ -318,9 +222,11 @@ def product_detail(request, dress_id):
             'form': review_form,
             'user_id': user_id,
             'selected_size': selected_size,
-            'available_sizes': available_sizes,  # Add available sizes to the context
+            'available_sizes': available_sizes,
         }
         return render(request, 'store/product_detail.html', context)
+
+
 def add_review(request, dress_id):
     if 'user_id' not in request.session:
         return redirect('/login')
@@ -349,6 +255,7 @@ def add_review(request, dress_id):
         return redirect('product_detail', dress_id=dress.id)
 
 
+###admin Pages##
 def admin_dashboard_view(request):
     users = User.objects.all()
     orders = Order.objects.all()
@@ -392,16 +299,13 @@ def admin_delete_user_view(request, user_id):
         return redirect('admin_users')
 
 
-
-class AdminOrdersView(View):
-    def get(self, request):
-        orders = Order.objects.all()
-        return render(request, 'admin/admin_orders.html', {'orders': orders})
+def admin_orders_manage(request):
+    orders = Order.objects.all()
+    return render(request, 'admin/admin_orders.html', {'orders': orders})
 # Product sections: List all products
 def admin_product_list_view(request):
     products = Dress.objects.all()
     return render(request, 'admin/admin_products.html', {'products': products})
-
 
 # Add Product
 def admin_product_add_view(request):
@@ -464,13 +368,6 @@ def admin_product_edit_view(request, product_id):
 
     return render(request, 'admin/admin_products.html', {'product': product})
 
-# Delete Product
-# def admin_product_delete_view(request, product_id):
-#     product = get_object_or_404(Dress, id=product_id)
-#     product.delete()
-    
-#     messages.success(request, 'Product deleted successfully!')
-#     return redirect('admin_products')
 def admin_product_delete_view(request, product_id):
     if request.method == 'POST':
         try:
@@ -481,31 +378,10 @@ def admin_product_delete_view(request, product_id):
             return JsonResponse({'success': False, 'error': str(e)})  # Ensure the error is returned correctly
     return JsonResponse({'success': False, 'error': 'Invalid request method'})  # Check if it's not a POST request
 
-def user_profile(request):
-    # Check if the user is logged in by verifying the session
-    if 'user_id' not in request.session:
-        return redirect('/login')  # Redirect to login page if not authenticated
-
-    # Assuming 'user_id' in session is the ID of the logged-in user
-    user_id = request.session['user_id']
-    
-    # Fetch the user's orders using the correct field name
-    orders = Order.objects.filter(UserID=user_id)  # Use 'UserID' as it matches your model
-    
-    # Fetch the user object using the correct method
-    user = User.objects.get(id=user_id)
-    
-    # Prepare context for the template
-    context = {
-        'orders': orders,
-        'user': user
-    }
-    
-    return render(request, 'store/user_profile.html', context)
 
 def admin_order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id)
-    return render(request, 'admin_orders.html', {'order': order})
+    return render(request, 'admin/admin_orders.html', {'order': order})
 
 def admin_order_delete(request, order_id):
     order = get_object_or_404(Order, id=order_id)
@@ -515,6 +391,185 @@ def admin_order_delete(request, order_id):
     return redirect('admin_order_detail', order_id=order_id)  # Redirect back to the order detail page if not POST
 
 
+def admin_order_delete(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order.delete()
+    return redirect('admin_orders')
+
+def admin_orders_view(request):
+    orders = Order.objects.all()
+    return render(request, 'admin/admin_orders.html', {'orders': orders})
+
+
+##cart ###
+def update_cart(request, item_id):
+    if 'user_id' not in request.session:
+        return redirect('/login')
+    else:
+        user_id = request.session['user_id']
+        user = get_object_or_404(User, pk=user_id)
+
+        # Get the order item and update the quantity
+        order_item = get_object_or_404(OrderItem, pk=item_id, OrderID__UserID=user)
+        new_quantity = int(request.POST.get('quantity', 1))
+
+        # Update the total amount
+        order = order_item.OrderID
+        order.TotalAmount -= order_item.Price * order_item.Quantity  # Subtract the current amount
+        order_item.Quantity = new_quantity
+        order_item.save()
+        order.TotalAmount += order_item.Price * new_quantity  # Add the new amount
+        order.save()
+
+        return redirect('cart',{'user_id':user_id})
+
+def add_to_cart(request, dress_id):
+    if 'user_id' not in request.session:
+        return redirect('/login')
+    else:
+        user_id = request.session['user_id']
+        user = get_object_or_404(User, pk=user_id)
+        dress = get_object_or_404(Dress, pk=dress_id)
+        
+        # Debugging line
+        print(request.POST)
+
+        # Get the selected size from the POST request
+        selected_size = request.POST.get('size')
+
+        # Debugging line
+        print(f"Selected size: {selected_size}")
+
+        if not selected_size:
+            # If no size is selected, redirect back to the dress detail page with an error message
+            return redirect('product_detail', dress_id=dress_id)
+
+        # Get or create the order with PaymentStatus 'Pending'
+        order, created = Order.objects.get_or_create(
+            UserID=user, 
+            PaymentStatus='Pending', 
+            defaults={'TotalAmount': 0, 'Processed_by': user}
+        )
+
+        # Get or create the order item with the selected size
+        order_item, created = OrderItem.objects.get_or_create(
+            OrderID=order, 
+            DressID=dress, 
+            size=selected_size,  # Add the selected size here
+            defaults={'Quantity': 1, 'Price': dress.Price}
+        )
+        
+        if not created:
+            # If the item already exists in the order with the same size, increment the quantity
+            order_item.Quantity += 1
+            order_item.save()
+        
+        # Update the total amount in the order
+        order.TotalAmount += dress.Price
+        order.save()
+
+        # Debugging: Print order details to ensure correct creation
+        print(f"Order ID: {order.id}, Total Amount: {order.TotalAmount}, Items: {order.orderitem_set.count()}")
+
+        return redirect('cart')
+
+def cart(request):
+    if 'user_id' not in request.session:
+        return redirect('/login')
+    else:
+        user_id = request.session['user_id']
+        user = get_object_or_404(User, pk=user_id)
+
+        # Initialize order and order_items
+        order = None
+        order_items = []
+
+        # Fetch the current pending order
+        try:
+            order = Order.objects.get(UserID=user, PaymentStatus='Pending')
+            order_items = order.orderitem_set.all()
+        except Order.DoesNotExist:
+            pass  # If no pending order, order_items remains empty and order is None
+
+        # Add the range for quantity selection
+        quantity_range = range(1, 11)
+
+        # Pass the data to the template
+        context = {
+            'order_items': order_items,
+            'order': order,
+            'quantity_range': quantity_range,
+            'user_id':user_id
+        }
+
+        return render(request, 'store/cart.html', context)
+
+def remove_from_cart(request, item_id):
+    if 'user_id' not in request.session:
+        return redirect('/login')
+    else:
+        user_id = request.session['user_id']
+        user = get_object_or_404(User, pk=user_id)
+
+        # Get the order item and delete it
+        order_item = get_object_or_404(OrderItem, pk=item_id, OrderID__UserID=user)
+        order = order_item.OrderID
+        order.TotalAmount -= order_item.Price * order_item.Quantity
+        order.save()
+        order_item.delete()
+
+        return redirect('cart')
+
+
+### Checkout ##
+def checkout_view(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('/login')  # Redirect to login if user is not authenticated
+
+    try:
+        order = Order.objects.get(UserID_id=user_id, PaymentStatus='pending')  # Adjust this based on your model
+    except Order.DoesNotExist:
+        return redirect('cart_empty')  # Redirect to a page that shows the cart is empty
+
+    # Create a Stripe Payment Intent
+    intent = stripe.PaymentIntent.create(
+        amount=int(order.TotalAmount * 100),  # amount in cents
+        currency='usd',
+        metadata={'order_id': order.id},
+    )
+    print(f"Stripe Secret Key: {settings.STRIPE_SECRET_KEY}")
+    print(f"Stripe Publishable Key: {settings.STRIPE_PUBLISHABLE_KEY}")
+
+    if request.method == 'POST':
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            # Process the payment with the cleaned data
+            payment_status = process_payment(order, form.cleaned_data)
+            if payment_status['status'] == 'success':
+                order.PaymentStatus = 'completed'  # Mark order as completed
+                order.save()
+                return redirect('payment_success')  # Redirect to success page
+            else:
+                # If payment fails, re-render the checkout page with an error message
+                return render(request, 'store/checkout.html', {
+                    'order': order,
+                    'order_items': order.orderitem_set.all(),  # Include order items
+                    'form': form,
+                    'error': payment_status['message'],
+                    'stripe_publishable_key': stripe.api_key,
+                    'client_secret': intent.client_secret,
+                })
+    else:
+        form = PaymentForm()  # Initialize an empty payment form
+
+    return render(request, 'store/checkout.html', {
+        'order': order,
+        'order_items': order.orderitem_set.all(),  # Include order items
+        'form': form,
+        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY,
+        'client_secret': intent.client_secret,
+    })
 
 def process_payment(request):
     if 'user_id' not in request.session:
@@ -522,11 +577,12 @@ def process_payment(request):
         return redirect('/login')
     
     user_id = request.session['user_id']
+    # handle the redirect as you have done
     try:
         order = Order.objects.get(UserID=user_id, PaymentStatus='Pending')
+        logger.debug(f"Order found: {order}")
     except Order.DoesNotExist:
-        logger.debug("No pending order found. Redirecting to cart.")
-        messages.error(request, "No pending order found.")
+    
         return redirect('cart')  # Redirect to cart if no pending order
 
     if request.method == 'POST':
@@ -546,8 +602,6 @@ def process_payment(request):
             return redirect('checkout')  # Redirect back to checkout on failure
 
     return render(request, 'store/checkout.html', {'order': order})
-
-
 
 def payment_success(request):
     return render(request, 'store/payment_success.html')

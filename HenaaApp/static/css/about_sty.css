@@ -1,0 +1,116 @@
+/* About   bage styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+}
+
+/* About Section Styles */
+.about_section_layout_padding_1 {
+    padding: 60px 0;
+    background-color: #f7f7f7;
+}
+
+.img-about {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    width: 80%;
+    /* Adjusted width to make the image smaller */
+    margin: 0 auto;
+    /* Center the image horizontally */
+}
+
+.img-about img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.img-about div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s;
+}
+
+.img-about:hover img {
+    transform: scale(1.05);
+}
+
+.img-about:hover div {
+    opacity: 0;
+}
+
+.detail-box {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.heading_container h2 {
+    font-weight: bold;
+    color: #333;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.detail-box p {
+    color: #555;
+    margin-bottom: 15px;
+    text-align: justify;
+    line-height: 1.8;
+    font-size: 18px;
+    /* Increased paragraph font size */
+}
+
+.btn-primary {
+    background-color: #6d3d6d;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #5a305a;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .about_section_layout_padding_1 {
+        padding: 30px 0;
+    }
+
+    .img-about {
+        width: 100%;
+        /* Make the image full width on smaller screens */
+    }
+
+    .heading_container h2 {
+        font-size: 28px;
+    }
+
+    .detail-box {
+        padding: 15px;
+    }
+
+    .detail-box p {
+        font-size: 16px;
+        /* Slightly smaller font size for mobile */
+    }
+
+    .btn-primary {
+        padding: 8px 16px;
+    }
+}

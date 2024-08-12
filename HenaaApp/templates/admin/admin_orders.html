@@ -1,3 +1,4 @@
+<!-- to manage order -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -111,9 +112,7 @@
                                         <td>{{ order.OrderDate }}</td>
                                         <td>{{ order.PaymentStatus }}</td>
                                         <td>
-                                            <!-- View Order Button -->
-                                            <a href="{% url 'admin_order_detail' order.id %}"
-                                                class="btn btn-info ajax-link" data-target="#main-content">View</a>
+                                            
                                             <!-- Delete Button triggers a confirmation -->
                                             <button type="button" class="btn btn-danger" data-toggle="modal"
                                                 data-target="#deleteOrderModal{{ order.id }}">
@@ -128,8 +127,7 @@
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="deleteOrderModalLabel">Delete Order: {{
-                                                        order.id }}</h5>
+                                                    <h5 class="modal-title" id="deleteOrderModalLabel">Delete Order: {{order.id }}</h5>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
