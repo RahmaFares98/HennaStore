@@ -34,7 +34,7 @@ SECRET_KEY = 'oq9ho25vt$x_5gfm^q)pk0s=zll1&z(01+^vv^hzml)mrxt892'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['16.171.152.95','localhost']
 
 # Application definition
 
@@ -102,16 +102,14 @@ WSGI_APPLICATION = 'HennaStoreProject.wsgi.application'
 # }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DATABASES = { 
+
+DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'HennaStoreProject',  # Make sure this is the correct database name
-        'USER': 'root',
-        'PASSWORD': 'Str0ngP@ssword!',  # Ensure this matches the password you set
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 
 # Password validation
