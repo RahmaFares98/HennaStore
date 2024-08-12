@@ -41,8 +41,8 @@ ALLOWED_HOSTS = []
 #AUTH_USER_MODEL = 'HenaaApp.CustomUser'
 
 INSTALLED_APPS = [
+     'HenaaApp',
     'grappelli',
-    'HenaaApp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -105,10 +105,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Henna_Store',
+        'NAME': 'HennaStoreProject',  # Make sure this is the correct database name
         'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',  # or your database server
+        'PASSWORD': 'Str0ngP@ssword!',  # Ensure this matches the password you set
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
@@ -152,3 +152,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+<<<<<<< HEAD
+=======
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # or any other directory you prefer
+>>>>>>> 87909356297b31289c0f018ef40508abda0b249f
