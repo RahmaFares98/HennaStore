@@ -1,11 +1,11 @@
-/* carousel style */
-
 .carousel-control-prevv,
 .carousel-control-nextt {
-    /* Changed from absolute to fixed for better control */
+    margin-left: 45%;
     bottom: 20px;
-    /* Position above the footer */
-    width: 55px;
+    margin-bottom: -5%;
+    position: absolute;
+    /* Ensuring the controls are square */
+    width: 50px;
     height: 55px;
     background-color: #30302e;
     opacity: 1;
@@ -15,20 +15,22 @@
     align-items: center;
     justify-content: center;
     z-index: 2;
-    /* Ensures controls are above other elements */
     cursor: pointer;
-    border-radius: 50%;
-    /* Makes the controls circular */
+    /* Removed border-radius to ensure square shape */
 }
 
+/* Position the prev control at the center bottom */
 .carousel-control-prevv {
-    left: 10%;
-    /* Adjust as needed to position control horizontally */
+    left: 0%;
+    transform: translateX(-120px);
+    /* Adjust to position control to the left of the center */
 }
 
+/* Position the next control at the center bottom */
 .carousel-control-nextt {
-    right: 10%;
-    /* Adjust as needed to position control horizontally */
+    left: 7%;
+    transform: translateX(20px);
+    /* Adjust to position control to the right of the center */
 }
 
 /* Hover and Focus Effects */

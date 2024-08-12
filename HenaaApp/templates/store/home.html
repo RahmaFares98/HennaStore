@@ -27,7 +27,7 @@ Email:rahmafaris981@gmail.com
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <!-- style css -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/Style_1.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style_s.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_7.css' %}">
 
     <!-- responsive -->
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
@@ -93,24 +93,24 @@ Email:rahmafaris981@gmail.com
         <div class="header_section">
             <div class="container">
                 <div class="containt_main">
-                <div id="mySidenav" class="sidenav">
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                    <a href="{% url 'home' %}">Home</a>
-                    <a href="{% url 'about' %}">About</a>
-                    <a href="{% url 'cart' %}">Cart</a>
-                    <a href="{% url 'profile' %}">Profile</a>
-                    <a href="#main_slider">Product</a>
-                    {% if user_id %}
-                    <a href="{% url 'logout' %}">Logout</a>
-                    {% else %}
-                    <a href="{% url 'login' %}">Login</a>
-                    <a href="{% url 'register' %}">Register</a>
-                    {% endif %}
-                </div>
-                
-                <span class="toggle_icon" onclick="openNav()">
-                    <img src="{% static 'images/toggle-icon.png' %}">
-                </span>
+                    <div id="mySidenav" class="sidenav">
+                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                        <a href="{% url 'home' %}">Home</a>
+                        <a href="{% url 'about' %}">About</a>
+                        <a href="{% url 'cart' %}">Cart</a>
+                        <a href="{% url 'profile' %}">Profile</a>
+                        <a href="#main_slider">Product</a>
+                        {% if user_id %}
+                        <a href="{% url 'logout' %}">Logout</a>
+                        {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <a href="{% url 'register' %}">Register</a>
+                        {% endif %}
+                    </div>
+
+                    <span class="toggle_icon" onclick="openNav()">
+                        <img src="{% static 'images/toggle-icon.png' %}">
+                    </span>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Categories
@@ -285,19 +285,17 @@ Email:rahmafaris981@gmail.com
                 </div>
                 {% endfor %}
             </div>
-                        <a class="carousel-control-prevv" href="#Second_slider" role="button" data-slide="prev">
-                            <i class="fa fa-angle-left"></i>
-                        </a>
-                        <a class="carousel-control-nextt" href="#Second_slider" role="button" data-slide="next">
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-            </div>
-
-            </div>
+        <div>
+            <a class="carousel-control-prevv" href="#Second_slider" role="button" data-slide="prev">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            <a class="carousel-control-nextt" href="#Second_slider" role="button" data-slide="next">
+                <i class="fa fa-angle-right"></i>
+            </a>
         </div>
     </div>
     </div>
-    </div>
+  
 
     <!-- Traditional section end -->
 
@@ -328,15 +326,15 @@ Email:rahmafaris981@gmail.com
     <!-- sidebar -->
     <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
-<script>
-    function openNav() {
+    <script>
+        function openNav() {
             document.getElementById("mySidenav").style.width = "250px";
         }
 
         function closeNav() {
             document.getElementById("mySidenav").style.width = "0";
         }
-</script>
+    </script>
 </body>
 
 </html>
