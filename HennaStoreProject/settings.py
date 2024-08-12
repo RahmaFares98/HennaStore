@@ -41,8 +41,8 @@ ALLOWED_HOSTS = ['16.171.152.95','172.0.0.1']
 #AUTH_USER_MODEL = 'HenaaApp.CustomUser'
 
 INSTALLED_APPS = [
+     'HenaaApp',
     'grappelli',
-    'HenaaApp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -105,14 +105,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Henna_Store',
+        'NAME': 'HennaStoreProject',  # Replace with your database name
         'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',  # or your database server
+        'PASSWORD': 'Str0ngP@ssword!',  # Replace with the root password you set
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
