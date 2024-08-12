@@ -105,13 +105,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Henna_Store',
+        'NAME': 'HennaStoreProject',  # Make sure this is the correct database name
         'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',  # or your database server
+        'PASSWORD': 'Str0ngP@ssword!',  # Ensure this matches the password you set
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
