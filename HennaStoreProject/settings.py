@@ -9,8 +9,6 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-import pymysql
-pymysql.install_as_MySQLdb()
 
 
 import os
@@ -150,7 +148,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-<<<<<<< HEAD
-=======
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # or any other directory you prefer
->>>>>>> 87909356297b31289c0f018ef40508abda0b249f
