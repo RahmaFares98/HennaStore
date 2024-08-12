@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'HennaStoreProject.wsgi.application'
 # }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DATABASES = {
+DATABASES = { 
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'HennaStoreProject',  # Make sure this is the correct database name
