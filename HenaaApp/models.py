@@ -33,18 +33,19 @@ class UserManager(models.Manager):
             if not bcrypt.checkpw(postData['password'].encode(), user.password.encode()):
                 errors['password'] = "Invalid password."
             return errors
-
-
 class User(models.Model):
     username = models.CharField(max_length=50)
     email = models.CharField(max_length=225)
     password = models.CharField(max_length=150)
-    confirm_pw=models.CharField(max_length=150)
-    created_at =models.DateTimeField(auto_now_add=True)
+    confirm_pw = models.CharField(max_length=150)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    is_admin = models.BooleanField(default=False)  # Add a field to distinguish admin users
-
+    is_admin = models.BooleanField(default=False)
     objects = UserManager()
+
+    def __str__(self):
+        return self.username
+
 
 def create_user(POST):
     password = POST['password']
